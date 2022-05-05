@@ -2,8 +2,8 @@ import React from 'react';
 
 //
 
-function Students() {
+function SavePopup() {
   return <></>;
 }
 
-export default Students;
+export default SavePopup;

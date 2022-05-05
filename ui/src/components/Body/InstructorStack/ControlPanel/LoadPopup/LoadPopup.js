@@ -2,8 +2,8 @@ import React from 'react';
 
 //
 
-function Teams() {
+function LoadPopup() {
   return <></>;
 }
 
-export default Teams;
+export default LoadPopup;
