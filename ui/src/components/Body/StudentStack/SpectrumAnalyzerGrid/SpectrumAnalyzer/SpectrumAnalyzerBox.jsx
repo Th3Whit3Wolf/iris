@@ -161,6 +161,7 @@ export const SpectrumAnalyzerBox = props => {
           amp: signal.power,
           bw: signal.bandwidth * 1e6,
           target_id: signal.target_id,
+          antenna_id: signal.antenna_id,
         });
       });
       window.sewApp[`specA${whichSpecA}`] = specA;

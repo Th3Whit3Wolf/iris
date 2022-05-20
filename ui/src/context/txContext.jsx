@@ -232,6 +232,7 @@ export const TxProvider = ({ children }) => {
       .then(response => response.json())
       .then(data => {
         console.log('TransmitterProvider', data);
+        window.sewApp.socket.emit('updateTx', { user: window.sewApp.socket.id, signals: data }); // TODO dont emit just update locally
         setTx([...data]);
       });
   }, []);
@@ -242,7 +243,7 @@ export const TxProvider = ({ children }) => {
       setTx(data.signals);
     }
   });
- 
+
   const updateTx = update => {
     window.sewApp.socket.emit('updateTx', { user: window.sewApp.socket.id, signals: update });
     setTx(update);

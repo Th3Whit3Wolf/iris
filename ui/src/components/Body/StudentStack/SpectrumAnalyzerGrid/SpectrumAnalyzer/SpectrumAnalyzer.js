@@ -255,7 +255,13 @@ export class SpectrumAnalyzer {
 
         this.signals
           .filter(signal => {
-            return signal.target_id === this.target_id;
+            if (signal.target_id) {
+              return signal.target_id === this.target_id;
+            } else if (signal.antenna_id) {
+              return signal.antenna_id === this.antenna_id;
+            } else {
+              return true;
+            }
           })
           .forEach((signal, i) => {
             let color = this.noiseColor;
