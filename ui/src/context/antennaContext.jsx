@@ -1,6 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import PropTypes from 'prop-types';
-import config from '../config';
 const antennaContext = React.createContext();
 const updateAntennaContext = React.createContext();
 
@@ -43,18 +42,6 @@ export const useUpdateAntenna = () => {
 
 export const AntennaProvider = ({ children }) => {
   const [antenna, setAntenna] = useState(defaultAntennaContext);
-  useEffect(() => {
-    const ApiUrl = config[process.env.REACT_APP_NODE_ENV || 'development'].apiUrl;
-    fetch(`${ApiUrl}/data/antenna`)
-      .then(response => response.json())
-      .then(data => {
-        data.forEach(antenna => {
-          antenna.band = parseInt(antenna.band);
-        });
-        console.log('AntennaProvider', data);
-        setAntenna([...data]);
-      });
-  }, []);
 
   window.sewApp.socket.on('updateAntennaClient', data => {
     if (data.user != window.sewApp.socket.id) {
@@ -62,9 +49,9 @@ export const AntennaProvider = ({ children }) => {
     }
   });
 
-  const updateAntenna = (update, startup) => {
-    console.log('updateAntenna', startup);
-    if (!startup) window.sewApp.socket.emit('updateAntenna', { user: window.sewApp.socket.id, signals: update });
+  const updateAntenna = update => {
+    console.log('updateAntenna');
+    window.sewApp.socket.emit('updateAntenna', { user: window.sewApp.socket.id, signals: update });
     setAntenna(update);
   };
 

@@ -4,20 +4,17 @@ import PropTypes from 'prop-types';
 import { Box, Button, Typography } from '@mui/material';
 import './TxModem.css';
 import { AstroTheme } from '../../../../../../themes/AstroTheme';
-import { useTx, useUpdateTx, useUser } from '../../../../../../context';
-import { CRUDdataTable } from '../../../../../../crud';
+import { useTx, useUpdateTx } from '../../../../../../context';
+import { useAntenna } from './../../../../../../context/antennaContext';
 
 export const TxModem = ({ unit }) => {
-  const user = useUser();
-  const txContext = useTx();
-  const setTx = useUpdateTx();
-  const unitData = txContext.filter(x => x.unit == unit && x.team_id == user.team_id && x.server_id == user.server_id);
+  const txData = useTx();
+  const updateTxData = useUpdateTx();
   const powerBudget = 23886; // Decided by SEW team
 
   //TODO: modem buttons, update state, video,
   const theme = AstroTheme;
-  const [activeModem, setActiveModem] = useState(1);
-  console.log(unitData.filter(x => x.modem_number == activeModem));
+  const [activeModem, setActiveModem] = useState(0);
 
   // Styles
   const sxCase = {
@@ -71,15 +68,13 @@ export const TxModem = ({ unit }) => {
     margin: '8px',
     boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.5)',
     border: '1px solid red',
-    backgroundColor: unitData.filter(x => x.modem_number == activeModem)[0].transmitting
-      ? 'red'
-      : theme.palette.tertiary.light3,
-    color: unitData.filter(x => x.modem_number == activeModem)[0].transmitting ? 'white' : 'black',
+    backgroundColor: txData[(unit - 1) * 4 + activeModem].transmitting ? 'red' : theme.palette.tertiary.light3,
+    color: txData[(unit - 1) * 4 + activeModem].transmitting ? 'white' : 'black',
     '&:hover': {
-      backgroundColor: unitData.filter(x => x.modem_number == activeModem)[0].transmitting
+      backgroundColor: txData[(unit - 1) * 4 + activeModem].transmitting
         ? theme.palette.error.main
         : theme.palette.critical.main,
-      color: unitData.filter(x => x.modem_number == activeModem)[0].transmitting ? 'black' : 'white',
+      color: txData[(unit - 1) * 4 + activeModem].transmitting ? 'black' : 'white',
     },
   };
 
@@ -102,42 +97,39 @@ export const TxModem = ({ unit }) => {
   // Modem selector buttons
   const TxModemButtonBox = () => (
     <Box sx={sxModemButtonBox}>
-      {unitData
-        .sort((a, b) => a.id - b.id)
-        .map((x, index) => {
-          if (x.unit == unit)
-            return <TxModemButton key={index} modem={x.modem_number} transmitting={x.transmitting} id={x.id} />;
-        })}
+      {txData.map((x, index) => {
+        if (x.unit == unit) return <TxModemButton key={index} modem={x.modem_number} transmitting={x.transmitting} />;
+      })}
     </Box>
   );
   const TxModemButton = ({ modem, transmitting }) => (
     <Button
       sx={{
-        backgroundColor: modem == activeModem ? theme.palette.primary.dark : theme.palette.primary.light2,
+        backgroundColor: modem - 1 == activeModem ? theme.palette.primary.dark : theme.palette.primary.light2,
         border: transmitting ? '2px solid red' : '2px solid ' + theme.palette.primary.main,
-        color: modem == activeModem ? 'white' : 'black',
+        color: modem - 1 == activeModem ? 'white' : 'black',
         width: '1em',
         margin: '8px',
         outline: 'none',
         '&:hover': {
-          backgroundColor: modem == activeModem ? theme.palette.primary.main : theme.palette.primary.light,
+          backgroundColor: modem - 1 == activeModem ? theme.palette.primary.main : theme.palette.primary.light,
         },
       }}
       onClick={e => {
-        setActiveModem(modem, e);
+        setActiveModem(parseInt(e.target.innerText) - 1);
       }}>
       {modem}
     </Button>
   );
-  TxModemButton.propTypes = { modem: PropTypes.number, id: PropTypes.number };
+  TxModemButton.propTypes = { modem: PropTypes.number };
 
   // Modem User Inputs
   const TxModemInput = () => {
-    console.log('unit: ', unit, 'active modem: ', activeModem, unitData);
-    const currentModem = unitData.map(x => x.modem_number).indexOf(activeModem);
-    const currentRow = txContext.map(x => x.id).indexOf(unitData[currentModem].id);
-    const [inputData, setInputData] = useState(txContext[currentRow]);
+    const currentRow = (unit - 1) * 4 + activeModem;
+    const [inputData, setInputData] = useState(txData[currentRow]);
     const [modemPower, setModemPower] = useState(inputData.bandwidth * Math.pow(10, (120 + inputData.power) / 10));
+
+    const antenna = useAntenna();
 
     const handleInputChange = ({ param, val }) => {
       if (param === 'power') {
@@ -153,19 +145,17 @@ export const TxModem = ({ unit }) => {
     };
 
     const handleApply = () => {
-      let tmpData = [...txContext];
+      let tmpData = [...txData];
       tmpData[currentRow] = inputData;
-      setTx(tmpData);
+      updateTxData(tmpData);
       setModemPower(inputData.bandwidth * Math.pow(10, (120 + inputData.power) / 10));
-      CRUDdataTable({ method: 'PATCH', path: 'transmitter', data: tmpData[currentRow] });
     };
 
     const handleTransmit = () => {
-      let tmpData = [...txContext];
+      let tmpData = [...txData];
       tmpData[currentRow].transmitting = !tmpData[currentRow].transmitting;
-      setTx(tmpData);
-      console.log('CRUD: ', tmpData[currentRow]);
-      CRUDdataTable({ method: 'PATCH', path: 'transmitter', data: tmpData[currentRow] });
+      tmpData[currentRow].target_id = antenna[tmpData[currentRow].antenna_id - 1].target_id;
+      updateTxData(tmpData);
     };
 
     return (
@@ -184,7 +174,7 @@ export const TxModem = ({ unit }) => {
             <option value={1}>1</option>
             <option value={2}>2</option>
           </select>
-          <Typography sx={sxValues}>{txContext[currentRow].antenna_id}</Typography>
+          <Typography sx={sxValues}>{txData[currentRow].antenna_id}</Typography>
         </Box>
         <Box sx={sxInputRow}>
           <label htmlFor='frequency'>Frequency</label>
@@ -198,7 +188,7 @@ export const TxModem = ({ unit }) => {
                 val: parseInt(e.target.value) || 0,
               })
             }></input>
-          <Typography sx={sxValues}>{txContext[currentRow].frequency + ' MHz'}</Typography>
+          <Typography sx={sxValues}>{txData[currentRow].frequency + ' MHz'}</Typography>
         </Box>
         <Box sx={sxInputRow}>
           <label htmlFor='bandwidth'>Bandwidth</label>
@@ -212,7 +202,7 @@ export const TxModem = ({ unit }) => {
                 val: parseInt(e.target.value) || 0,
               })
             }></input>
-          <Typography sx={sxValues}>{txContext[currentRow].bandwidth + ' MHz'}</Typography>
+          <Typography sx={sxValues}>{txData[currentRow].bandwidth + ' MHz'}</Typography>
         </Box>
         <Box sx={sxInputRow}>
           <label htmlFor='power'>Power</label>
@@ -221,7 +211,7 @@ export const TxModem = ({ unit }) => {
             type='string'
             value={inputData.power}
             onChange={e => handleInputChange({ param: 'power', val: e.target.value })}></input>
-          <Typography sx={sxValues}>{`${txContext[currentRow].power} dBm`}</Typography>
+          <Typography sx={sxValues}>{`${txData[currentRow].power} dBm`}</Typography>
         </Box>
         <Box sx={sxInputRow}>
           <Typography>Power Consumed: {Math.round((100 * modemPower) / powerBudget)}%</Typography>
