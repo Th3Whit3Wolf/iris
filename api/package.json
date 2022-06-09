@@ -1,6 +1,6 @@
 {
-  "name": "capstone-api",
-  "version": "1.0.0",
+  "name": "iris-api",
+  "version": "0.1.0",
   "description": "",
   "main": "./src/index.js",
   "scripts": {
@@ -9,7 +9,6 @@
     "test": "jest",
     "lint": "eslint ./src/**/*.js ./db/**/*.js ./*.js"
   },
-  "author": "Jeff Haddock and Eric Sung",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
