@@ -2,14 +2,15 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
-  return knex.schema.createTable('player', table => {
+exports.up = async (knex) => {
+  return knex.schema.createTable('players', table => {
     table.increments('id').primary();
-    table.string('name').notNullable();
+    table.string('name', 64).notNullable();
     table.integer('server_id').notNullable();
     table.foreign('server_id').references('server.id');
     table.integer('team_id').notNullable();
     table.foreign('team_id').references('team.id');
+    table.timestamps(true, true); 
   });
 };
 
@@ -17,6 +18,6 @@ exports.up = function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
-    return knex.schema.dropTable('player');
+exports.down = async (knex) => {
+  return knex.schema.dropTable('players');
 };

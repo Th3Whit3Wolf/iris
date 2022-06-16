@@ -2,11 +2,12 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = function(knex) {
-  return knex.schema.createTable('target', table => {
+exports.up = async (knex) => {
+  return knex.schema.createTable('targets', table => {
     table.increments('id').primary();
-    table.string('name').notNullable();
+    table.string('name', 64).notNullable();
     table.integer('offset').notNullable();
+    table.timestamps(true, true); 
   });
 };
 
@@ -14,6 +15,6 @@ exports.up = function(knex) {
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = function(knex) {
-    return knex.schema.dropTable('target');
+exports.down = async (knex) => {
+  return knex.schema.dropTable('targets');
 };
