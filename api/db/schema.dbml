@@ -1,0 +1,237 @@
+Project "IRIS" {
+  database_type: 'PostgreSQL'
+  Note: 'A stand-alone training platform for Space Electronic Warfare'
+}
+
+Enum bands {
+	TLF
+	ELF
+	SLF
+	ULF
+	VLF
+	LF
+	MF
+	HF
+	VHF
+	UHF
+	SHF
+	EHF
+	THF
+	L
+	S
+	C
+	X
+	Ku
+	K
+	Ka
+	V
+	W
+	mm
+}
+
+Enum modulations {
+  8QAM
+  16QAM
+  BPSK
+  QPSK
+}
+
+Table app_authors {
+  id Int [pk, increment]
+  first_name varchar(64) [not null]
+  last_name varchar(64) [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table servers {
+  id Int [pk, increment]
+  name varchar(64) [not null]
+  start_time DateTime [default: `now()`, not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table teams {
+  id Int [pk, increment]
+  name varchar(64) [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table targets {
+  id Int [pk, increment]
+  name varchar(64) [not null]
+  offset Int [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table antennas {
+  id Int [pk, increment]
+  server_id Int [not null]
+  team_id Int [not null]
+  target_id Int [not null]
+  unit Int [not null]
+  operational Boolean [default: false, not null]
+  locked Boolean [default: false, not null]
+  band Bands [not null]
+  offset Int [not null]
+  hpa Boolean [default: false, not null]
+  loopback Boolean [default: false, not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table actions {
+  id Int [pk, increment]
+  server_id Int [not null]
+  team_id Int [not null]
+  antenna_id Int [not null]
+  unit Int [not null]
+  modem_number Int [not null]
+  operational Boolean [default: false, not null]
+  frequency Int [not null]
+  bandwidth Int [not null]
+  power Int [not null]
+  time DateTime [default: `now()`, not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table players {
+  id Int [pk, increment]
+  name varchar(64) [not null]
+  server_id Int [not null]
+  team_id Int [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table receivers {
+  id Int [pk, increment]
+  server_id Int [not null]
+  team_id Int [not null]
+  antenna_id Int [not null]
+  unit Int [not null]
+  operational Boolean [default: false, not null]
+  frequency Int [not null]
+  bandwidth Int [not null]
+  number Int [not null]
+  modulation modulations [not null]
+  fec varchar(64) [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table transmitters {
+  id Int [pk, increment]
+  server_id Int [not null]
+  team_id Int [not null]
+  antenna_id Int [not null]
+  unit Int [not null]
+  modem_number Int [not null]
+  operational Boolean [default: false, not null]
+  frequency Int [not null]
+  bandwidth Int [not null]
+  power Int [not null]
+  transmitting Boolean [default: false, not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table spectrum_analyzers {
+  id Int [pk, increment]
+  server_id Int [not null]
+  team_id Int [not null]
+  unit Int [not null]
+  number Int [not null]
+  operational Boolean [default: false, not null]
+  frequency Int [not null]
+  span Int [not null]
+  marker1freq Int [not null]
+  marker2freq Int [not null]
+  trace Boolean [default: false, not null]
+  rf Boolean [default: false, not null]
+  antenna_id Int [not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table signals {
+  id Int [pk, increment]
+  server_id Int [not null]
+  target_id Int [not null]
+  unit Int [not null]
+  frequency Int [not null]
+  bandwidth Int [not null]
+  power Int [not null]
+  modulation modulations [not null]
+  fec varchar(64) [not null]
+  feed varchar(64) [not null]
+  operational Boolean [default: false, not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table injects {
+  id Int [pk, increment]
+  server_id Int [not null]
+  equipment varchar(64) [not null]
+  unit Int [not null]
+  operational Boolean [default: false, not null]
+  time DateTime [default: `now()`, not null]
+  created_at DateTime [default: `now()`, not null]
+  updated_at DateTime [default: `now()`, not null]
+}
+
+Table saves {
+  id Int [pk, increment]
+  name varchar(64) [not null]
+}
+
+Table saves_signals {
+  id Int [pk, increment]
+  save_id Int [not null]
+  signal_id Int [not null]
+}
+
+Table saves_injects {
+  id Int [pk, increment]
+  save_id Int [not null]
+  inject_id Int [not null]
+}
+
+Ref: antennas.server_id - servers.id [delete: Set Null]
+Ref: antennas.team_id - teams.id [delete: Set Null]
+Ref: antennas.target_id - targets.id [delete: Set Null]
+
+Ref: actions.server_id - servers.id [delete: Set Null]
+Ref: actions.team_id - teams.id [delete: Set Null]
+Ref: actions.antenna_id - antennas.id [delete: Set Null]
+
+Ref: players.server_id - servers.id [delete: Set Null]
+Ref: players.team_id - teams.id [delete: Set Null]
+
+Ref: receivers.server_id - servers.id [delete: Set Null]
+Ref: receivers.team_id - teams.id [delete: Set Null]
+Ref: receivers.antenna_id - antennas.id [delete: Set Null]
+
+Ref: transmitters.server_id - servers.id [delete: Set Null]
+Ref: transmitters.team_id - teams.id [delete: Set Null]
+Ref: transmitters.antenna_id - antennas.id [delete: Set Null]
+
+Ref: spectrum_analyzers.server_id - servers.id [delete: Set Null]
+Ref: spectrum_analyzers.team_id - teams.id [delete: Set Null]
+Ref: spectrum_analyzers.antenna_id - antennas.id [delete: Set Null]
+
+Ref: signals.server_id - servers.id [delete: Set Null]
+Ref: signals.target_id - targets.id [delete: Set Null]
+
+Ref: injects.server_id - servers.id [delete: Set Null]
+
+Ref: saves_signals.save_id - saves.id [delete: Set Null]
+Ref: saves_signals.signal_id - signals.id [delete: Set Null]
+
+Ref: saves_injects.save_id - saves.id [delete: Set Null]
+Ref: saves_injects.inject_id - injects.id [delete: Set Null]
