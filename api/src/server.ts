@@ -1,12 +1,11 @@
+import knex from "./knex";
+import Logger from "./logger";
+//import { Websocket } from "./websocket";
+import { apiRules, errorHandler, requestLogger } from "./middleware";
 import express, { Request, Response, NextFunction } from "express";
 import { Query, Send, ParamsDictionary } from "express-serve-static-core";
-import { Server, Socket } from "socket.io";
 import { createServer } from "http";
-
-import Logger from "./logger";
-import knex from "./knex";
-import { Websocket } from "./websocket";
-import { apiRules, errorHandler, requestLogger } from "./middleware";
+import { Server, Socket } from "socket.io";
 
 const PORT = process.env.PORT ? parseInt(process.env.PORT) : 8080;
 
@@ -48,9 +47,9 @@ class ClientManager {
   }
 }
 
-class SocketService {
-  public clients: Map<string, Socket> = new Map();
-}
+// class SocketService {
+//   public clients: Map<string, Socket> = new Map();
+// }
 
 const clientManager = new ClientManager();
 
@@ -186,9 +185,7 @@ export const initServer = async () => {
         request?.query?.id
       ) {
         try {
-          const data = knex(request.params.table_name)
-            .where("id", request?.query?.id)
-            .del();
+          knex(request.params.table_name).where("id", request?.query?.id).del();
           response.status(204);
         } catch (error) {
           response.status(404).json({ error });

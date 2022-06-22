@@ -28,16 +28,16 @@ interface SocketInterface {
   middlewareImplementation?(socket: Socket, next: any): void;
 }
 
-class UpdateSocket implements SocketInterface {
-  handleConnection(socket: Socket) {
-    console.log("=====   CONNECTED A CLIENT   =====");
-    console.log(`===== SOCKET ID ${socket.id} =====`);
-  }
+// class UpdateSocket implements SocketInterface {
+//   handleConnection(socket: Socket) {
+//     console.log("=====   CONNECTED A CLIENT   =====");
+//     console.log(`===== SOCKET ID ${socket.id} =====`);
+//   }
 
-  middlewareImplementation(socket: Socket, next: any) {
-    //Implement your middleware for orders here
-    return next();
-  }
-}
+//   middlewareImplementation(socket: Socket, next: any) {
+//     //Implement your middleware for orders here
+//     return next();
+//   }
+// }
 
 export { type SocketInterface, Websocket };
