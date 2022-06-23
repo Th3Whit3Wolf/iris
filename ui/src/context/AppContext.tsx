@@ -6,8 +6,6 @@ import { antennas, satellites } from "../constants";
 // eslint-disable-next-line no-unused-vars
 import { io, Socket } from "socket.io-client";
 
-const win = window as any as AppWindow;
-
 // Create a sync global context for the RF Environments
 const defaultApp: IrisApp = {
 	teamInfo: {
@@ -16,7 +14,7 @@ const defaultApp: IrisApp = {
 	},
 	//updateTxData: useUpdateTx(),
 	init: () => {
-		win.iris.socketInit(win.iris.socket);
+		window.iris.socketInit(window.iris.socket);
 	},
 	constants: {
 		satellites,
@@ -32,11 +30,11 @@ const defaultApp: IrisApp = {
 	socketInit: (socket: Socket) => {
 		socket.on("connect", () => {
 			console.log("Connected to the server");
-			win.iris.teamInfo = {
+			window.iris.teamInfo = {
 				team: "default",
 				server: ""
 			};
-			socket.emit("updateTeam", { team: win.iris.team });
+			socket.emit("updateTeam", { team: window.iris.team });
 
 			socket.on("updateSignals", (update: any) => {
 				const update_targetsAdded = update.signals.map((x: any) => {
@@ -46,19 +44,19 @@ const defaultApp: IrisApp = {
 					return { ...x, target_id };
 				});
 				console.log("targeted list", update_targetsAdded);
-				win.iris.environment.updateSignals(update_targetsAdded);
+				window.iris.environment.updateSignals(update_targetsAdded);
 				console.log("updateSignals received", update_targetsAdded);
 				/*
-                win.iris.environment.updateSignals(update);
+                window.iris.environment.updateSignals(update);
                 console.log('updateSignals received', update);
                 */
 				for (let i = 1; i <= 4; i++) {
-					const specA = win.iris.getSpectrumAnalyzer(i);
+					const specA = window.iris.getSpectrumAnalyzer(i);
 					if (specA) {
 						specA.signals = specA.signals.filter((signal: any) => {
 							return signal.team_id !== update.signals[0].team_id;
 						});
-						win.iris.environment.signals.forEach((signal: any) => {
+						window.iris.environment.signals.forEach((signal: any) => {
 							specA.signals.push({
 								team_id: signal.team_id,
 								freq: signal.frequency * 1e6,
@@ -79,13 +77,13 @@ const defaultApp: IrisApp = {
 		socket.connect();
 	},
 	getSpectrumAnalyzer: (i: number) => {
-		if (i === 1) return win.iris.specA1;
-		if (i === 2) return win.iris.specA2;
-		if (i === 3) return win.iris.specA3;
-		return win.iris.specA4;
+		if (i === 1) return window.iris.specA1;
+		if (i === 2) return window.iris.specA2;
+		if (i === 3) return window.iris.specA3;
+		return window.iris.specA4;
 	},
 	announceSpecAChange: (i: number) => {
-		const specA = win.iris.getSpectrumAnalyzer(i);
+		const specA = window.iris.getSpectrumAnalyzer(i);
 		if (specA) {
 			const patchData = {
 				id: specA.isRfMode ? specA.config?.rf?.id : specA.config?.if?.id,
@@ -121,7 +119,7 @@ const AppContext = createContext({} as IAppContext);
 const AppProvider: FunctionComponent<AppProviderProps> = ({ children }) => {
 	const [app, setAppState] = useState(defaultApp);
 	const setApp = () => {
-		setAppState({ ...win.iris });
+		setAppState({ ...window.iris });
 	};
 
 	const value = useMemo(() => ({
@@ -143,6 +141,6 @@ AppProvider.propTypes = {
 
 const useAppContext = (): IAppContext => useContext(AppContext);
 
-win.iris = defaultApp;
+window.iris = defaultApp;
 
 export { AppProvider, AppContext, useAppContext };

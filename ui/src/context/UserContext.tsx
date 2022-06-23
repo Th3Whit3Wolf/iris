@@ -3,13 +3,12 @@ import { FunctionComponent, useContext, useState, useMemo, createContext } from 
 
 const defaultUserContext = { server_id: 1, team_id: 1 };
 const UserContext = createContext({} as IUserContext);
-const win = window as any as AppWindow;
 
 const UserProvider: FunctionComponent<UserProviderProps> = ({ children }) => {
 	const [user, setUserState] = useState(defaultUserContext);
-	win.iris.socket.on("updateUserClient", (data: any): void => {
+	window.iris.socket.on("updateUserClient", (data: any): void => {
 		console.log("updateUserClient", data);
-		if (data.user != win.iris.socket.id) {
+		if (data.user != window.iris.socket.id) {
 			console.log("actually updating the User");
 			setUserState(data.signals);
 		}
@@ -19,8 +18,8 @@ const UserProvider: FunctionComponent<UserProviderProps> = ({ children }) => {
 		console.log("updateUser", update);
 		// patch request to update database
 		// if patch request is good
-		win.iris.socket.emit("updateUser", {
-			user: win.iris.socket.id,
+		window.iris.socket.emit("updateUser", {
+			user: window.iris.socket.id,
 			signals: update
 		});
 		setUserState(update);

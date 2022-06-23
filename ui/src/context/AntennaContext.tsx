@@ -33,7 +33,6 @@ const defaultAntennaContext = [
 ];
 
 const AntennaContext = createContext({} as IAntennaContext);
-const win = window as any as AppWindow;
 
 const AntennaProvider: FunctionComponent<AntennaProviderProps> = ({
 	children
@@ -46,16 +45,16 @@ const AntennaProvider: FunctionComponent<AntennaProviderProps> = ({
 		setAntennaState([...antennaData]);
 	}
 
-	win.iris.socket.on("updateAntennaClient", (data: any) => {
-		if (data.user != win.iris.socket.id) {
+	window.iris.socket.on("updateAntennaClient", (data: any) => {
+		if (data.user != window.iris.socket.id) {
 			setAntennaState(data.signals);
 		}
 	});
 
 	const setAntenna = (update: any) => {
 		//console.log('updateAntenna');
-		win.iris.socket.emit("updateAntenna", {
-			user: win.iris.socket.id,
+		window.iris.socket.emit("updateAntenna", {
+			user: window.iris.socket.id,
 			signals: update
 		});
 		setAntennaState(update);

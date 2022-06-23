@@ -215,7 +215,6 @@ const defaultRxContext = [
 ];
 
 const RxContext = createContext({} as IRxContext);
-const win = window as any as AppWindow;
 
 const RxProvider: FunctionComponent<RxProviderProps> = ({ children }) => {
 	const [rx, setRxState] = useState(defaultRxContext);
@@ -226,16 +225,16 @@ const RxProvider: FunctionComponent<RxProviderProps> = ({ children }) => {
 		setRxState([...rxData]);
 	}
 
-	win.iris.socket.on("updateRxClient", (data: any) => {
-		if (data.user != win.iris.socket.id) {
+	window.iris.socket.on("updateRxClient", (data: any) => {
+		if (data.user != window.iris.socket.id) {
 			console.log("actually updating the Rx");
 			setRxState(data.signals);
 		}
 	});
 
 	const setRx = (update: any) => {
-		win.iris.socket.emit("updateRx", {
-			user: win.iris.socket.id,
+		window.iris.socket.emit("updateRx", {
+			user: window.iris.socket.id,
 			signals: update
 		});
 		setRxState(update);

@@ -79,10 +79,6 @@ interface ISpectrumAnalyzer {
 	signals: any;
 }
 
-type AppWindow = Window & {
-	iris: IrisApp;
-};
-
 type RxProviderProps = {
 	children?: React.ReactNode;
 };

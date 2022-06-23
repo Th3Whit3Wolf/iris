@@ -215,7 +215,6 @@ const defaultTxContext = [
 ];
 
 const TxContext = createContext({} as ITxContext);
-const win = window as any as AppWindow;
 
 const TxProvider: FunctionComponent<TxProviderProps> = ({ children }) => {
 	const [tx, setTxState] = useState(defaultTxContext);
@@ -226,16 +225,16 @@ const TxProvider: FunctionComponent<TxProviderProps> = ({ children }) => {
 		setTxState([...txData]);
 	}
 
-	win.iris.socket.on("updateTxClient", (data: any) => {
-		if (data.user != win.iris.socket.id) {
+	window.iris.socket.on("updateTxClient", (data: any) => {
+		if (data.user != window.iris.socket.id) {
 			console.log("actually updating the Tx");
 			setTxState(data.signals);
 		}
 	});
 
 	const setTx = (update: any) => {
-		win.iris.socket.emit("updateTx", {
-			user: win.iris.socket.id,
+		window.iris.socket.emit("updateTx", {
+			user: window.iris.socket.id,
 			signals: update
 		});
 		setTxState(update);
