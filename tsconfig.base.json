@@ -9,7 +9,7 @@
     "isolatedModules": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "moduleResolution": "Node",
-    "noImplicitAny": false,
+    //"noImplicitAny": false,
     "noUnusedLocals": true,
     "removeComments": true,
     "resolveJsonModule": true,

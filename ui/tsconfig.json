@@ -1,14 +1,33 @@
 {
-  "extends": "../tsconfig.base",
-  "compilerOptions": {
-    "esModuleInterop": false,                       /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
-    "module": "ESNext",
-    "outDir": "./dist",                             /* Redirect output structure to the directory. */
-    "jsx": "react-jsx"
-  },
-  "include": ["./src"],
-  "exclude": [
-    "dist/**",
-    "tests/**"
-  ],
+	"extends": "../tsconfig.base",
+	"compilerOptions": {
+		"esModuleInterop": false /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
+		"module": "ESNext",
+		"outDir": "./dist" /* Redirect output structure to the directory. */,
+		"jsx": "react-jsx",
+		"isolatedModules": true,
+		"useDefineForClassFields": true,
+		"baseUrl": ".",
+		"paths": {
+			"#api": ["./src/api"],
+			"#api/*": ["./src/api/*"],
+			"#assets/*": ["./src/assets/*"],
+			"#components": ["./src/components"],
+			"#components/*": ["./src/components/*"],
+			"#constants": ["./src/constants"],
+			"#context": ["./src/context"],
+			"#context/*": ["./src/context/*"],
+			"#hooks": ["./src/hooks"],
+			"#hooks/*": ["./src/hooks/*"],
+			"#themes": ["./src/themes"],
+			"#themes/*": ["./src/themes/*"],
+			"#types": ["./src/types"],
+			"#types/*": ["./src/types/*"],
+			"#utils": ["./src/utils"],
+			"#utils/*": ["./src/utils/*"]
+		}
+	},
+	"types": ["vitest/globals", "vite/client"],
+	"include": ["./src"],
+	"exclude": ["dist/**", "tests/**"]
 }

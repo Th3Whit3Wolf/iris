@@ -53,6 +53,7 @@
 		"debug": "^4.3.4",
 		"eslint": "^8.13.0",
 		"eslint-config-prettier": "8.5.0",
+		"eslint-import-resolver-typescript": "^2.7.1",
 		"eslint-plugin-import": "^2.26.0",
 		"eslint-plugin-jsx-a11y": "^6.5.1",
 		"eslint-plugin-prettier": "4.0.0",
@@ -80,6 +81,10 @@
 			"plugin:react-hooks/recommended",
 			"prettier"
 		],
+		"plugins": [
+			"import",
+			"@typescript-eslint"
+		],
 		"parser": "@typescript-eslint/parser",
 		"overrides": [
 			{
@@ -97,7 +102,7 @@
 				],
 				"parser": "@typescript-eslint/parser",
 				"rules": {
-					"@typescript-eslint/no-explicit-any": "error"
+					"@typescript-eslint/no-explicit-any": "warn"
 				},
 				"extends": [
 					"plugin:@typescript-eslint/recommended",
@@ -123,7 +128,11 @@
 				]
 			},
 			"import/resolver": {
-				"typescript": {}
+				"typescript": {
+					"project": [
+						"tsconfig.json"
+					]
+				}
 			},
 			"react": {
 				"version": "detect"
