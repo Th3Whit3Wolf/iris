@@ -1,8 +1,7 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { FunctionComponent, useContext, useState, createContext } from "react";
 import PropTypes from 'prop-types';
-import config from '../config';
-const rxContext = React.createContext();
-const updateRxContext = React.createContext();
+import { ReceiverAPI } from "#api";
+import { HTTPMethod, useFetchReceiver } from "#hooks";
 
 const defaultRxContext = [
   {
@@ -215,46 +214,76 @@ const defaultRxContext = [
   },
 ];
 
-export const useRx = () => {
-  return useContext(rxContext);
+type IrisWindowT = {
+	socket: any;
+};
+type SocketWindow = Window & {
+	iris: IrisWindowT;
 };
 
-export const useUpdateRx = () => {
-  return useContext(updateRxContext);
+type RxProviderProps = {
+	children?: React.ReactNode;
 };
 
-export const RxProvider = ({ children }) => {
-  const [rx, setRx] = useState(defaultRxContext);
+interface IRxContextItem  {
+	id: number,
+	server_id: number,
+	team_id: number,
+	unit: number,
+  number: number,
+	operational: boolean,
+	antenna_id: number,
+  frequency: number,
+  bandwidth: number,
+  modulation: string,
+  fec: string,
+} 
 
-  useEffect(() => {
-    const ApiUrl = config[process.env.REACT_APP_NODE_ENV || 'development'].apiUrl;
-    fetch(`${ApiUrl}/data/receiver`)
-      .then(response => response.json())
-      .then(data => {
-        //console.log('ReceiverProvider', data);
-        setRx([...data]);
-      });
-  }, []);
+interface IRxContext {
+	rx: IRxContextItem[];
+	setRx: (update: any) => void;
+}
 
-  window.sewApp.socket.on('updateRxClient', data => {
-    if (data.user != window.sewApp.socket.id) {
+const RxContext = createContext({} as IRxContext);
+const win = window as any as SocketWindow;
+
+const RxProvider: FunctionComponent<RxProviderProps> = ({
+	children
+}) => {
+  const [rx, setRxState] = useState(defaultRxContext);
+  const api = new ReceiverAPI();
+	const rxData = useFetchReceiver(api, HTTPMethod.GET);
+
+  if (rxData !== undefined && Array.isArray(rxData)) {
+		setRxState([...rxData]);
+	}
+
+  win.iris.socket.on('updateRxClient', (data: any) => {
+    if (data.user != win.iris.socket.id) {
       console.log('actually updating the Rx');
-      setRx(data.signals);
+      setRxState(data.signals);
     }
   });
  
-  const updateRx = (update) => {
-    window.sewApp.socket.emit('updateRx', { user: window.sewApp.socket.id, signals: update });
-    setRx(update);
+  const setRx = (update: any) => {
+    win.iris.socket.emit('updateRx', { user: win.iris.socket.id, signals: update });
+    setRxState(update);
   };
 
   return (
-    <rxContext.Provider value={rx}>
-      <updateRxContext.Provider value={updateRx}>{children}</updateRxContext.Provider>
-    </rxContext.Provider>
+    <RxContext.Provider value={{
+      rx,
+      setRx
+    }}>
+     {children}
+    </RxContext.Provider>
   );
 };
 
 RxProvider.propTypes = {
   children: PropTypes.any,
 };
+
+const useRxContext = (): IRxContext => useContext(RxContext);
+
+export { RxProvider, RxContext, useRxContext };
