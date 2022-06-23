@@ -116,15 +116,6 @@ const defaultApp: IrisApp = {
 	team: undefined
 };
 
-type AppProviderProps = {
-	children?: React.ReactNode;
-};
-
-interface IAppContext {
-	app: IrisApp;
-	setApp: (update: any) => void;
-}
-
 const AppContext = createContext({} as IAppContext);
 
 const AppProvider: FunctionComponent<AppProviderProps> = ({ children }) => {

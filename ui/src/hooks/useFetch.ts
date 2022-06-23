@@ -1,12 +1,3 @@
-import { useEffect, useReducer, useRef } from "react";
-
-const enum HTTPMethod {
-	DELETE,
-	GET,
-	POST,
-	PUT
-}
-
 import {
 	ActionAPI,
 	AntennaAPI,
@@ -24,215 +15,14 @@ import {
 	TeamAPI,
 	TransmitterAPI
 } from "#api";
+import { useEffect, useReducer, useRef } from "react";
 
-type API =
-	| ActionAPI
-	| AntennaAPI
-	| AppAuthorsAPI
-	| InjectAPI
-	| PlayerAPI
-	| ReceiverAPI
-	| SaveAPI
-	| SaveSignalAPI
-	| SaveInjectAPI
-	| ServerAPI
-	| SignalAPI
-	| SpectrumAnalyzerAPI
-	| TargetAPI
-	| TeamAPI
-	| TransmitterAPI;
-
-interface State<T> {
-	data?: T;
-	error?: Error;
-}
-
-interface ReturnAction {
-	id: number;
-	antenna_id: { type: "number" };
-	bandwidth: { type: "number" };
-	frequency: { type: "number" };
-	modem_number: { type: "number" };
-	name: { type: "string" };
-	operational: { type: "boolean" };
-	power: { type: "number" };
-	server_id: { type: "number" };
-	team_id: { type: "number" };
-	time: { type: "Date" };
-	unit: { type: "number" };
-}
-
-interface ReturnAntenna {
-	id: number;
-	band: string;
-	hpa: boolean;
-	locked: boolean;
-	loopback: boolean;
-	offset: number;
-	operational: boolean;
-	server_id: number;
-	target_id: number;
-	team_id: number;
-	unit: number;
-}
-
-interface ReturnAppAuthor {
-	id: number;
-	first_name: string;
-	last_name: string;
-}
-
-interface ReturnInject {
-	id: number;
-	equipment: string;
-	operational: boolean;
-	server_id: number;
-	time: Date;
-	unit: number;
-}
-
-interface ReturnPlayer {
-	id: number;
-	name: string;
-	server_id: number;
-	team_id: number;
-}
-
-interface ReturnReceiver {
-	id: number;
-	antenna_id: number;
-	bandwidth: number;
-	fec: string;
-	frequency: number;
-	modulation: string;
-	number: number;
-	operational: boolean;
-	server_id: number;
-	team_id: number;
-	unit: number;
-}
-
-interface ReturnSave {
-	id: number;
-	name: string;
-}
-
-interface ReturnSaveInject {
-	id: number;
-	save_id: number;
-	signal_id: number;
-}
-
-interface ReturnSaveSignal {
-	id: number;
-	save_id: number;
-	signal_id: number;
-}
-
-interface ReturnServer {
-	id: number;
-	name: string;
-	start_time: {
-		type: "Date";
-	};
-}
-
-interface ReturnSignal {
-	id: number;
-	bandwidth: number;
-	fec: string;
-	feed: string;
-	frequency: number;
-	modulation: string;
-	operational: boolean;
-	power: number;
-	server_id: number;
-	target_id: number;
-}
-
-interface ReturnSpectrumAnalyzer {
-	id: number;
-	antenna_id: number;
-	frequency: number;
-	marker1freq: number;
-	marker2freq: number;
-	number: number;
-	operational: boolean;
-	rf: boolean;
-	server_id: number;
-	span: number;
-	team_id: number;
-	trace: boolean;
-	unit: number;
-}
-
-interface ReturnTarget {
-	id: number;
-	name: string;
-	offset: number;
-}
-
-interface ReturnTeam {
-	id: number;
-	name: string;
-}
-
-interface ReturnTransmitter {
-	id: number;
-	antenna_id: number;
-	bandwidth: number;
-	frequency: number;
-	modem_number: number;
-	operational: boolean;
-	power: number;
-	server_id: number;
-	team_id: number;
-	transmitting: boolean;
-	unit: number;
-}
-
-type Return =
-	| ReturnAction
-	| ReturnAction[]
-	| ReturnAntenna
-	| ReturnAntenna[]
-	| ReturnAppAuthor
-	| ReturnAppAuthor[]
-	| ReturnInject
-	| ReturnInject[]
-	| ReturnPlayer
-	| ReturnPlayer[]
-	| ReturnReceiver
-	| ReturnReceiver[]
-	| ReturnSave
-	| ReturnSave[]
-	| ReturnSaveInject
-	| ReturnSaveInject[]
-	| ReturnSaveSignal
-	| ReturnSaveSignal[]
-	| ReturnServer
-	| ReturnServer[]
-	| ReturnSignal
-	| ReturnSignal[]
-	| ReturnSpectrumAnalyzer
-	| ReturnSpectrumAnalyzer[]
-	| ReturnTarget
-	| ReturnTarget[]
-	| ReturnTeam
-	| ReturnTeam[]
-	| ReturnTransmitter
-	| ReturnTransmitter[];
-
-type Cache<T = Return> = { [url: string]: T };
-
-// discriminated union type
-type Action<T> =
-	| { type: "loading" }
-	| { type: "fetched"; payload: T }
-	| { type: "error"; payload: Error };
-
-const fetchHandler = async (api: API, method: HTTPMethod, methodData?: Record<string, unknown>) => {
-	let res
+const fetchHandler = async (
+	api: API,
+	method: HTTPMethod,
+	methodData?: Record<string, unknown>
+) => {
+	let res;
 	switch (method) {
 		case HTTPMethod.DELETE:
 			res = await api.delete();
@@ -241,18 +31,16 @@ const fetchHandler = async (api: API, method: HTTPMethod, methodData?: Record<st
 			res = await api.get();
 			break;
 		case HTTPMethod.POST:
-			res = await api.create(
-				methodData !== undefined ? methodData : {}
-			);
+			res = await api.create(methodData !== undefined ? methodData : {});
 			break;
 		case HTTPMethod.PUT:
-			res = await api.update(
-				methodData !== undefined ? methodData : {}
-			);
+			res = await api.update(methodData !== undefined ? methodData : {});
 			break;
 	}
 	return res;
-}
+};
+
+type Cache<T = Return> = { [url: string]: T };
 
 function useFetch<T = Return>(
 	api: API,
@@ -269,7 +57,10 @@ function useFetch<T = Return>(
 	};
 
 	// Keep state logic separated
-	const fetchReducer = (currentState: State<T>, action: Action<T>): State<T> => {
+	const fetchReducer = (
+		currentState: State<T>,
+		action: Action<T>
+	): State<T> => {
 		switch (action.type) {
 			case "loading":
 				return { ...initialState };
@@ -298,7 +89,7 @@ function useFetch<T = Return>(
 			}
 
 			try {
-				const res = await fetchHandler(api, method, methodData)
+				const res = await fetchHandler(api, method, methodData);
 
 				if (res !== undefined) {
 					if (!res.ok) {
@@ -350,7 +141,7 @@ const useFetchAppAuthors = (
 	method: HTTPMethod,
 	methodData?: Record<string, unknown>
 ) => {
-		return useFetch<ReturnAppAuthor | ReturnAppAuthor[]>(api, method, methodData);
+	return useFetch<ReturnAppAuthor | ReturnAppAuthor[]>(api, method, methodData);
 };
 
 const useFetchInject = (
@@ -390,7 +181,11 @@ const useFetchSaveSignal = (
 	method: HTTPMethod,
 	methodData?: Record<string, unknown>
 ) => {
-	return useFetch<ReturnSaveSignal | ReturnSaveSignal[]>(api, method, methodData);
+	return useFetch<ReturnSaveSignal | ReturnSaveSignal[]>(
+		api,
+		method,
+		methodData
+	);
 };
 
 const useFetchSaveInject = (
@@ -398,7 +193,11 @@ const useFetchSaveInject = (
 	method: HTTPMethod,
 	methodData?: Record<string, unknown>
 ) => {
-	return useFetch<ReturnSaveInject | ReturnSaveInject[]>(api, method, methodData);
+	return useFetch<ReturnSaveInject | ReturnSaveInject[]>(
+		api,
+		method,
+		methodData
+	);
 };
 
 const useFetchServer = (
@@ -422,7 +221,11 @@ const useFetchSpectrumAnalyzer = (
 	method: HTTPMethod,
 	methodData?: Record<string, unknown>
 ) => {
-	return useFetch<ReturnSpectrumAnalyzer | ReturnSpectrumAnalyzer[]>(api, method, methodData);
+	return useFetch<ReturnSpectrumAnalyzer | ReturnSpectrumAnalyzer[]>(
+		api,
+		method,
+		methodData
+	);
 };
 
 const useFetchTarget = (
@@ -446,15 +249,14 @@ const useFetchTransmitter = (
 	method: HTTPMethod,
 	methodData?: Record<string, unknown>
 ) => {
-	return useFetch<ReturnTransmitter | ReturnTransmitter[]>(api, method, methodData);
+	return useFetch<ReturnTransmitter | ReturnTransmitter[]>(
+		api,
+		method,
+		methodData
+	);
 };
 
 export {
-	HTTPMethod,
-	type ReturnServer,
-	type ReturnTarget,
-	type ReturnTeam,
-	type ReturnTransmitter,
 	useFetchAction,
 	useFetchAntenna,
 	useFetchAppAuthors,

@@ -30,38 +30,8 @@ const defaultSignal = [
 	}
 ];
 
-type IrisWindowT = {
-	socket: any;
-    environment: any;
-};
-type SocketWindow = Window & {
-	iris: IrisWindowT;
-};
-
-type SignalProviderProps = {
-	children?: React.ReactNode;
-};
-
-interface ISignalContextItem {
-	id: number;
-	server_id: number;
-	target_id: number;
-	frequency: number;
-	power: number;
-	bandwidth: number;
-	modulation: string;
-	fec: string;
-	feed: string;
-	operational: boolean;
-}
-
-interface ISignalContext {
-	signal: ISignalContextItem[];
-	setSignal: (update: any) => void;
-}
-
 const SignalContext = createContext({} as ISignalContext);
-const win = window as any as SocketWindow;
+const win = window as any as AppWindow;
 
 const SignalProvider: FunctionComponent<SignalProviderProps> = ({
 	children

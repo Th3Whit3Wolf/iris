@@ -51,6 +51,15 @@ type IrisApp = {
 	};
 };
 
+type AppProviderProps = {
+	children?: React.ReactNode;
+};
+
+interface IAppContext {
+	app: IrisApp;
+	setApp: (update: any) => void;
+}
+
 interface ISpectrumAnalyzer {
 	config: {
 		if?: {
@@ -95,6 +104,28 @@ interface IRxContextItem {
 interface IRxContext {
 	rx: IRxContextItem[];
 	setRx: (update: any) => void;
+}
+
+type SignalProviderProps = {
+	children?: React.ReactNode;
+};
+
+interface ISignalContextItem {
+	id: number;
+	server_id: number;
+	target_id: number;
+	frequency: number;
+	power: number;
+	bandwidth: number;
+	modulation: string;
+	fec: string;
+	feed: string;
+	operational: boolean;
+}
+
+interface ISignalContext {
+	signal: ISignalContextItem[];
+	setSignal: (update: any) => void;
 }
 
 type TxProviderProps = {
