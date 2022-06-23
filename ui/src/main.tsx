@@ -1,7 +1,8 @@
 import App from "./App";
 import {
 	AntennaProvider,
-  AppProvider,
+	AppProvider,
+	ColorModeProvider,
 	RxProvider,
 	SignalProvider,
 	TxProvider,
@@ -13,19 +14,21 @@ import ReactDOM from "react-dom";
 
 ReactDOM.render(
 	<React.StrictMode>
-    <UserProvider>
-    <AppProvider>
-      <SignalProvider>
-        <AntennaProvider>
-          <RxProvider>
-            <TxProvider>
-              <App />
-            </TxProvider>
-          </RxProvider>
-        </AntennaProvider>
-      </SignalProvider>
-    </AppProvider>
-    </UserProvider>
-  </React.StrictMode>,
+		<ColorModeProvider>
+			<UserProvider>
+				<AppProvider>
+					<SignalProvider>
+						<AntennaProvider>
+							<RxProvider>
+								<TxProvider>
+									<App />
+								</TxProvider>
+							</RxProvider>
+						</AntennaProvider>
+					</SignalProvider>
+				</AppProvider>
+			</UserProvider>
+		</ColorModeProvider>
+	</React.StrictMode>,
 	document.getElementById("root")
 );

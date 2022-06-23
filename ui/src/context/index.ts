@@ -4,7 +4,7 @@ import {
 	useAntennaContext
 } from "./AntennaContext";
 import { AppProvider, AppContext, useAppContext } from "./AppContext";
-import ColorModeContext from "./ColorModeContext";
+import { ColorModeProvider, ColorModeContext } from "./ColorModeContext";
 import { RxProvider, RxContext, useRxContext } from "./RxContext";
 import {
 	SignalProvider,
@@ -19,6 +19,7 @@ export {
 	AntennaContext,
 	AppProvider,
 	AppContext,
+	ColorModeProvider,
 	ColorModeContext,
 	RxProvider,
 	RxContext,

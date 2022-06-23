@@ -214,38 +214,8 @@ const defaultTxContext = [
 	}
 ];
 
-type IrisWindowT = {
-	socket: any;
-};
-type SocketWindow = Window & {
-	iris: IrisWindowT;
-};
-
-type TxProviderProps = {
-	children?: React.ReactNode;
-};
-
-interface ITxContextItem {
-	id: number;
-	server_id: number;
-	team_id: number;
-	unit: number;
-	modem_number: number;
-	operational: boolean;
-	antenna_id: number;
-	frequency: number;
-	bandwidth: number;
-	power: number;
-	transmitting: boolean;
-}
-
-interface ITxContext {
-	tx: ITxContextItem[];
-	setTx: (update: any) => void;
-}
-
 const TxContext = createContext({} as ITxContext);
-const win = window as any as SocketWindow;
+const win = window as any as AppWindow;
 
 const TxProvider: FunctionComponent<TxProviderProps> = ({ children }) => {
 	const [tx, setTxState] = useState(defaultTxContext);

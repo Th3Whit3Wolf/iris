@@ -28,6 +28,6 @@
 		}
 	},
 	"types": ["vitest/globals", "vite/client"],
-	"include": ["./src"],
+	"include": ["./src", "./types"],
 	"exclude": ["dist/**", "tests/**"]
 }

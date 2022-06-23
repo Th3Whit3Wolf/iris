@@ -32,38 +32,8 @@ const defaultAntennaContext = [
 	}
 ];
 
-type IrisWindowT = {
-	socket: any;
-};
-type SocketWindow = Window & {
-	iris: IrisWindowT;
-};
-
-type AntennaProviderProps = {
-	children?: React.ReactNode;
-};
-
-interface IAntennaContextItem  {
-	id: number,
-	server_id: number,
-	team_id: number,
-	target_id: number,
-	unit: number,
-	operational: boolean,
-	locked: boolean,
-	band: number,
-	offset: number,
-	hpa: boolean,
-	loopback: boolean
-} 
-
-interface IAntennaContext {
-	antenna: IAntennaContextItem[];
-	setAntenna: (update: any) => void;
-}
-
 const AntennaContext = createContext({} as IAntennaContext);
-const win = window as any as SocketWindow;
+const win = window as any as AppWindow;
 
 const AntennaProvider: FunctionComponent<AntennaProviderProps> = ({
 	children

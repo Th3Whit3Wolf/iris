@@ -1,33 +1,11 @@
-import React, { FunctionComponent, useContext, useState, createContext } from "react";
 import PropTypes from "prop-types";
+import { FunctionComponent, useContext, useState, createContext } from "react";
+
 const defaultUserContext = { server_id: 1, team_id: 1 };
-
-type IrisWindowT = {
-	socket: any;
-};
-
-type SocketWindow = Window & {
-	iris: IrisWindowT;
-};
-
-interface IUserContextItem {
-	server_id: number ;
-	team_id: number;
-}
-
-interface IUserContext {
-	user: IUserContextItem;
-	setUser: (update: any) => void;
-}
-
-type UserProviderProps = {
-	children?: React.ReactNode;
-};
-
 const UserContext = createContext({} as IUserContext);
+const win = window as any as AppWindow;
 
-const UserProvider: FunctionComponent<UserProviderProps> = ({children}) => {
-	const win = window as any as SocketWindow;
+const UserProvider: FunctionComponent<UserProviderProps> = ({ children }) => {
 	const [user, setUserState] = useState(defaultUserContext);
 	win.iris.socket.on("updateUserClient", (data: any): void => {
 		console.log("updateUserClient", data);
@@ -49,13 +27,14 @@ const UserProvider: FunctionComponent<UserProviderProps> = ({children}) => {
 	};
 
 	return (
-		<UserContext.Provider value={{
-			user,
-			setUser
-		}}>
-				{children}
+		<UserContext.Provider
+			value={{
+				user,
+				setUser
+			}}
+		>
+			{children}
 		</UserContext.Provider>
-		
 	);
 };
 
@@ -65,8 +44,4 @@ UserProvider.propTypes = {
 	children: PropTypes.node
 };
 
-export {
-    UserProvider,
-    UserContext,
-    useUserContext
-}
+export { UserProvider, UserContext, useUserContext };
