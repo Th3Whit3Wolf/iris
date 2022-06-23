@@ -17,5 +17,24 @@
     "check": "npm run check -ws",
     "api": "npm start -w iris-api",
     "ui": "npm start -w iris-ui"
+  },
+  "eslintConfig": {
+    "settings": {
+      "import/parsers": {
+        "@typescript-eslint/parser": [
+          ".ts",
+          ".tsx"
+        ]
+      },
+      "import/resolver": {
+        "typescript": {
+          "project": [
+            "tsconfig.json",
+            "api/tsconfig.json",
+            "ui/tsconfig.json"
+          ]
+        }
+      }
+    }
   }
 }
