@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { FunctionComponent, useContext, useState, createContext } from "react";
+import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 
 const defaultUserContext = { server_id: 1, team_id: 1 };
 const UserContext = createContext({} as IUserContext);
@@ -26,12 +26,13 @@ const UserProvider: FunctionComponent<UserProviderProps> = ({ children }) => {
 		setUserState(update);
 	};
 
+	const value = useMemo(() => ({
+		user, setUser
+	}), [user]);
+
 	return (
 		<UserContext.Provider
-			value={{
-				user,
-				setUser
-			}}
+			value={value}
 		>
 			{children}
 		</UserContext.Provider>

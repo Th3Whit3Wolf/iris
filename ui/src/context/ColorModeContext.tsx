@@ -10,8 +10,6 @@ import {
 	useMemo
 } from "react";
 
-
-
 const ColorModeContext = createContext({} as IColorModeContext);
 
 const ColorModeProvider: FunctionComponent<ColorModePoviderProps> = ({
@@ -19,7 +17,7 @@ const ColorModeProvider: FunctionComponent<ColorModePoviderProps> = ({
 }) => {
 	const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
 	const [mode, setMode] = useState<PaletteMode>(prefersDarkMode ? "dark" : "light");
-	const colorMode = useMemo(
+	const value = useMemo(
 		() => ({
 			// The dark mode switch would invoke this method
 			toggleColorMode: () => {
@@ -33,7 +31,7 @@ const ColorModeProvider: FunctionComponent<ColorModePoviderProps> = ({
 	return (
 		<ColorModeContext.Provider
 			value={
-				colorMode
+				value
 			}
 		>
 			<ThemeProvider theme={theme}>{children}</ThemeProvider>

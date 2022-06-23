@@ -1,7 +1,7 @@
 import { ReceiverAPI } from "#api";
 import { HTTPMethod, useFetchReceiver } from "#hooks";
 import PropTypes from "prop-types";
-import { FunctionComponent, useContext, useState, createContext } from "react";
+import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 
 const defaultRxContext = [
 	{
@@ -241,12 +241,13 @@ const RxProvider: FunctionComponent<RxProviderProps> = ({ children }) => {
 		setRxState(update);
 	};
 
+	const value = useMemo(() => ({
+		rx, setRx
+	}), [rx]);
+
 	return (
 		<RxContext.Provider
-			value={{
-				rx,
-				setRx
-			}}
+			value={value}
 		>
 			{children}
 		</RxContext.Provider>

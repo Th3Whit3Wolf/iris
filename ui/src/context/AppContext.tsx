@@ -1,8 +1,8 @@
+import PropTypes from "prop-types";
+import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 import { SpectrumAnalyzerAPI } from "#api";
 import { RfEnvironment } from "../RfEnvironment";
 import { antennas, satellites } from "../constants";
-import PropTypes from "prop-types";
-import { FunctionComponent, useContext, useState, createContext } from "react";
 // eslint-disable-next-line no-unused-vars
 import { io, Socket } from "socket.io-client";
 
@@ -124,12 +124,13 @@ const AppProvider: FunctionComponent<AppProviderProps> = ({ children }) => {
 		setAppState({ ...win.iris });
 	};
 
+	const value = useMemo(() => ({
+		app, setApp
+	}), [app]);
+
 	return (
 		<AppContext.Provider
-			value={{
-				app,
-				setApp
-			}}
+			value={value}
 		>
 			{children}
 		</AppContext.Provider>

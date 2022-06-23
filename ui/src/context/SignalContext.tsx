@@ -1,7 +1,7 @@
 import { SignalAPI } from "#api";
 import { HTTPMethod, useFetchSignal } from "#hooks";
 import PropTypes from "prop-types";
-import { FunctionComponent, useContext, useState, createContext } from "react";
+import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 
 const defaultSignal = [
 	{
@@ -52,12 +52,13 @@ const SignalProvider: FunctionComponent<SignalProviderProps> = ({
 		setSignalState(update);
 	};
 
+	const value = useMemo(() => ({
+		signal, setSignal
+	}), [signal]);
+
 	return (
 		<SignalContext.Provider
-			value={{
-				signal,
-				setSignal
-			}}
+			value={value}
 		>
 			{children}
 		</SignalContext.Provider>

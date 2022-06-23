@@ -1,7 +1,7 @@
 import { TransmitterAPI } from "#api";
 import { HTTPMethod, useFetchTransmitter } from "#hooks";
 import PropTypes from "prop-types";
-import { FunctionComponent, useContext, useState, createContext } from "react";
+import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 
 const defaultTxContext = [
 	{
@@ -241,8 +241,12 @@ const TxProvider: FunctionComponent<TxProviderProps> = ({ children }) => {
 		setTxState(update);
 	};
 
+	const value = useMemo(() => ({
+		tx, setTx
+	}), [tx]);
+
 	return (
-		<TxContext.Provider value={{ tx, setTx }}>{children}</TxContext.Provider>
+		<TxContext.Provider value={value}>{children}</TxContext.Provider>
 	);
 };
 

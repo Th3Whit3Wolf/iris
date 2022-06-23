@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import { FunctionComponent, useContext, useState, createContext } from "react";
+import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 import { AntennaAPI } from "#api";
 import { HTTPMethod, useFetchAntenna } from "#hooks";
 
@@ -61,11 +61,12 @@ const AntennaProvider: FunctionComponent<AntennaProviderProps> = ({
 		setAntennaState(update);
 	};
 
+	const value = useMemo(() => ({
+		antenna, setAntenna
+	}), [antenna]);
+
 	return (
-		<AntennaContext.Provider value={{
-			antenna,
-			setAntenna
-		}}>
+		<AntennaContext.Provider value={value}>
 				{children}
 		</AntennaContext.Provider>
 	);
