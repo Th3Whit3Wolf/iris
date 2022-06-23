@@ -1,21 +1,15 @@
 import APIQueryBuilder from "../APIQueryBuilder";
 
-const apiError = (fnName: string, expected: string, received: string) => {
-	throw new Error(
-		`[AntennaAPI::${fnName}] Error(Invalid Type):\nExpected: ${expected}.\nReceived: ${received}\n`
-	);
-};
-
 const endpoint = "antenna";
 const validQueryParameters = {
-    band: { type: "string" },
-    hpa: { type: "boolean" },
-    locked: { type: "boolean" },
-    loopback: { type: "boolean" },
-    offset: { type: "number" },
-    operational: { type: "boolean" },
+	band: { type: "string" },
+	hpa: { type: "boolean" },
+	locked: { type: "boolean" },
+	loopback: { type: "boolean" },
+	offset: { type: "number" },
+	operational: { type: "boolean" },
 	server_id: { type: "number" },
-    target_id: { type: "number" },
+	target_id: { type: "number" },
 	team_id: { type: "number" },
 	unit: { type: "number" }
 };
@@ -30,34 +24,34 @@ class AntennaAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "band", value });
 			return this;
 		} else {
-			return apiError("band", "string", value);
+			console.log(Error);
 		}
 	};
 
-    hpa = (value: boolean) => {
+	hpa = (value: boolean) => {
 		if (typeof value === "boolean") {
 			this.addQueryParameter({ name: "hpa", value });
 			return this;
 		} else {
-			return apiError("hpa", "boolean", value);
+			console.log(Error);
 		}
 	};
 
-    locked = (value: boolean) => {
+	locked = (value: boolean) => {
 		if (typeof value === "boolean") {
 			this.addQueryParameter({ name: "locked", value });
 			return this;
 		} else {
-			return apiError("locked", "boolean", value);
+			console.log(Error);
 		}
 	};
 
-    loopback = (value: boolean) => {
+	loopback = (value: boolean) => {
 		if (typeof value === "boolean") {
 			this.addQueryParameter({ name: "loopback", value });
 			return this;
 		} else {
-			return apiError("loopback", "boolean", value);
+			console.log(Error);
 		}
 	};
 
@@ -66,55 +60,54 @@ class AntennaAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "offset", value });
 			return this;
 		} else {
-			return apiError("offset", "number", value);
+			console.log(Error);
 		}
 	};
 
-    operational = (value: boolean) => {
+	operational = (value: boolean) => {
 		if (typeof value === "boolean") {
 			this.addQueryParameter({ name: "operational", value });
 			return this;
 		} else {
-			return apiError("operational", "boolean", value);
+			console.log(Error);
 		}
 	};
 
-    server_id = (value: number) => {
+	server_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "server_id", value });
 			return this;
 		} else {
-			return apiError("server_id", "number", value);
+			console.log(Error);
 		}
 	};
 
-    team_id = (value: number) => {
+	team_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "team_id", value });
 			return this;
 		} else {
-			return apiError("team_id", "number", value);
+			console.log(Error);
 		}
 	};
 
-    target_id = (value: number) => {
+	target_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "target_id", value });
 			return this;
 		} else {
-			return apiError("target_id", "number", value);
+			console.log(Error);
 		}
 	};
 
-    unit = (value: number) => {
+	unit = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "unit", value });
 			return this;
 		} else {
-			return apiError("unit", "number", value);
+			console.log(Error);
 		}
 	};
-
 }
 
 export default AntennaAPI;

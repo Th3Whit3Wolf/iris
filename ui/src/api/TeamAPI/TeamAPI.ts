@@ -1,14 +1,8 @@
 import APIQueryBuilder from "../APIQueryBuilder";
 
-const apiError = (fnName: string, expected: string, received: string) => {
-	throw new Error(
-		`[TeamAPI::${fnName}] Error(Invalid Type):\nExpected: ${expected}.\nReceived: ${received}\n`
-	);
-};
-
 const endpoint = "team";
 const validQueryParameters = {
-	name: { type: "string" },
+	name: { type: "string" }
 };
 
 class TeamAPI extends APIQueryBuilder {
@@ -21,7 +15,7 @@ class TeamAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "name", value });
 			return this;
 		} else {
-			return apiError("name", "string", value);
+			console.log(Error);
 		}
 	};
 }

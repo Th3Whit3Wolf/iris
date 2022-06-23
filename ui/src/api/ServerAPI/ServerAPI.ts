@@ -1,11 +1,5 @@
 import APIQueryBuilder from "../APIQueryBuilder";
 
-const apiError = (fnName: string, expected: string, received: string) => {
-	throw new Error(
-		`[ServerAPI::${fnName}] Error(Invalid Type):\nExpected: ${expected}.\nReceived: ${received}\n`
-	);
-};
-
 const endpoint = "server";
 const validQueryParameters = {
 	name: { type: "string" },
@@ -24,7 +18,7 @@ class ServerAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "name", value });
 			return this;
 		} else {
-			return apiError("name", "string", value);
+			console.log(Error);
 		}
 	};
 
@@ -33,7 +27,7 @@ class ServerAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "start_time", value });
 			return this;
 		} else {
-			return apiError("start_time", "Date", value.toString());
+			console.log(Error);
 		}
 	};
 }

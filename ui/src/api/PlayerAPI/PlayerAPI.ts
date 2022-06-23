@@ -1,16 +1,10 @@
 import APIQueryBuilder from "../APIQueryBuilder";
 
-const apiError = (fnName: string, expected: string, received: string) => {
-	throw new Error(
-		`[PlayerAPI::${fnName}] Error(Invalid Type):\nExpected: ${expected}.\nReceived: ${received}\n`
-	);
-};
-
 const endpoint = "player";
 const validQueryParameters = {
 	name: { type: "string" },
-    server_id: { type: "number" },
-	team_id: { type: "number" },
+	server_id: { type: "number" },
+	team_id: { type: "number" }
 };
 
 class PlayerAPI extends APIQueryBuilder {
@@ -23,25 +17,25 @@ class PlayerAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "name", value });
 			return this;
 		} else {
-			return apiError("name", "string", value);
+			console.log(Error);
 		}
 	};
 
-    server_id = (value: number) => {
+	server_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "server_id", value });
 			return this;
 		} else {
-			return apiError("server_id", "number", value);
+			console.log(Error);
 		}
 	};
 
-    team_id = (value: number) => {
+	team_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "team_id", value });
 			return this;
 		} else {
-			return apiError("team_id", "number", value);
+			console.log(Error);
 		}
 	};
 }

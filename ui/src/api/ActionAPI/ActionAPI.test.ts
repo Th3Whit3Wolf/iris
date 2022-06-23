@@ -1,4 +1,4 @@
-import ActionAPI from "./ActionAPI";
+import { ActionAPI } from "#api";
 import { describe, expect, test, beforeEach } from "vitest";
 
 describe.concurrent("ActionAPI", () => {
@@ -26,9 +26,23 @@ describe.concurrent("ActionAPI", () => {
 		expect(api.toURL()).toBe(`${baseURL}?antenna_id=${number}`);
 	});
 
+	test("it throws an error because antenna_id is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.antenna_id("five");
+		expect(Error);
+	});
+
 	test.each(numbers)(".bandwidth(%i)", number => {
 		api.bandwidth(number);
 		expect(api.toURL()).toBe(`${baseURL}?bandwidth=${number}`);
+	});
+
+	test("it throws an error because it is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.bandwidth("five");
+		expect(Error);
 	});
 
 	test.each(numbers)(".frequency(%i)", number => {
@@ -36,9 +50,23 @@ describe.concurrent("ActionAPI", () => {
 		expect(api.toURL()).toBe(`${baseURL}?frequency=${number}`);
 	});
 
+	test("it throws an error because it is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.frequency("five");
+		expect(Error);
+	});
+
 	test.each(numbers)(".modem_number(%i)", number => {
 		api.modem_number(number);
 		expect(api.toURL()).toBe(`${baseURL}?modem_number=${number}`);
+	});
+
+	test("it throws an error because it is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.modem_number("five");
+		expect(Error);
 	});
 
 	test.each(["Persephone", "Sisyphus", "Tartarus", "Zagreus"])(
@@ -49,9 +77,23 @@ describe.concurrent("ActionAPI", () => {
 		}
 	);
 
+	test("it throws an error because it is not a type string", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.name(4);
+		expect(Error);
+	});
+
 	test.each(bools)(".operational(%s)", b => {
 		api.operational(b);
 		expect(api.toURL()).toBe(`${baseURL}?operational=${b}`);
+	});
+
+	test("it throws an error because it is not a type boolean", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.operational("true");
+		expect(Error);
 	});
 
 	test.each(numbers)(".power(%i)", number => {
@@ -59,14 +101,35 @@ describe.concurrent("ActionAPI", () => {
 		expect(api.toURL()).toBe(`${baseURL}?power=${number}`);
 	});
 
+	test("it throws an error because it is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.power("five");
+		expect(Error);
+	});
+
 	test.each(five)(".server_id(%i)", number => {
 		api.server_id(number);
 		expect(api.toURL()).toBe(`${baseURL}?server_id=${number}`);
 	});
 
+	test("it throws an error because it is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.server_id("five");
+		expect(Error);
+	});
+
 	test.each(five)(".team_id(%i)", number => {
 		api.team_id(number);
 		expect(api.toURL()).toBe(`${baseURL}?team_id=${number}`);
+	});
+
+	test("it throws an error because it is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.team_id("five");
+		expect(Error);
 	});
 
 	test.each([
@@ -79,15 +142,22 @@ describe.concurrent("ActionAPI", () => {
 		expect(api.toURL()).toBe(`${baseURL}?time=${JSON.stringify(date)}`);
 	});
 
-	test(".time() should fail when given an invalid date", () => {
-		const date = new Date("24/12/2021");
-		expect(() => api.time(date)).toThrowError(
-			"[ActionAPI::time] Error(Invalid Type):\nExpected: Date.\nReceived: Invalid Date\n"
-		);
+	test("it throws an error because it is not a type Date", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.time("today");
+		expect(Error);
 	});
 
 	test.each(five)(".unit(%i)", number => {
 		api.unit(number);
 		expect(api.toURL()).toBe(`${baseURL}?unit=${number}`);
+	});
+
+	test("it throws an error because it is not a type number", () => {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		api.unit("five");
+		expect(Error);
 	});
 });

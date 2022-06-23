@@ -1,6 +1,5 @@
-
-import { describe, expect, test, beforeEach } from 'vitest'
 import APIQueryBuilder from "./APIQueryBuilder";
+import { describe, expect, test, beforeEach } from "vitest";
 
 const endpoint = "posts";
 const baseURL = "http://localhost:8080/api/v1/posts";
@@ -26,12 +25,12 @@ describe.concurrent("API Query Builder Test", () => {
 		expect(api.toURL()).toBe(baseURL);
 	});
 
-	test.each(["Morris", "Steven", "Mike"])(".title(%s)", (name) => {
+	test.each(["Morris", "Steven", "Mike"])(".title(%s)", name => {
 		api.addQueryParameter({ name: "title", value: name });
 		expect(api.toURL()).toBe(`${baseURL}?title=${name}`);
 	});
 
-	test.each([1, 2, 3, 4, 5, 6, 7, 8, 9])(".userID(%i)", (idNumber) => {
+	test.each([1, 2, 3, 4, 5, 6, 7, 8, 9])(".userID(%i)", idNumber => {
 		api.addQueryParameter({ name: "userID", value: idNumber });
 		expect(api.toURL()).toBe(`${baseURL}?userID=${idNumber}`);
 	});

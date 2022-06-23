@@ -1,22 +1,16 @@
 import APIQueryBuilder from "../APIQueryBuilder";
 
-const apiError = (fnName: string, expected: string, received: string) => {
-	throw new Error(
-		`[TransmitterAPI::${fnName}] Error(Invalid Type):\nExpected: ${expected}.\nReceived: ${received}\n`
-	);
-};
-
 const endpoint = "transmitter";
 const validQueryParameters = {
-    antenna_id: { type: "number" },
-    bandwidth: { type: "number" },
-    frequency: { type: "number" },
-    modem_number: { type: "number" },
-    operational: { type: "boolean" },
-    power: { type: "number" },
+	antenna_id: { type: "number" },
+	bandwidth: { type: "number" },
+	frequency: { type: "number" },
+	modem_number: { type: "number" },
+	operational: { type: "boolean" },
+	power: { type: "number" },
 	server_id: { type: "number" },
 	team_id: { type: "number" },
-    transmitting: { type: "boolean" },
+	transmitting: { type: "boolean" },
 	unit: { type: "number" }
 };
 
@@ -25,30 +19,30 @@ class TransmitterAPI extends APIQueryBuilder {
 		super(endpoint, validQueryParameters);
 	}
 
-    antenna_id = (value: number) => {
+	antenna_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "antenna_id", value });
 			return this;
 		} else {
-			return apiError("antenna_id", "number", value);
+			console.log(Error);
 		}
 	};
 
-    bandwidth = (value: number) => {
+	bandwidth = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "bandwidth", value });
 			return this;
 		} else {
-			return apiError("bandwidth", "number", value);
+			console.log(Error);
 		}
 	};
 
-    frequency = (value: number) => {
+	frequency = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "frequency", value });
 			return this;
 		} else {
-			return apiError("frequency", "number", value);
+			console.log(Error);
 		}
 	};
 
@@ -57,61 +51,61 @@ class TransmitterAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "modem_number", value });
 			return this;
 		} else {
-			return apiError("modem_number", "number", value);
+			console.log(Error);
 		}
 	};
 
-    operational = (value: boolean) => {
+	operational = (value: boolean) => {
 		if (typeof value === "boolean") {
 			this.addQueryParameter({ name: "operational", value });
 			return this;
 		} else {
-			return apiError("operational", "boolean", value);
+			console.log(Error);
 		}
 	};
 
-    power = (value: number) => {
+	power = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "power", value });
 			return this;
 		} else {
-			return apiError("power", "number", value);
+			console.log(Error);
 		}
 	};
 
-    server_id = (value: number) => {
+	server_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "server_id", value });
 			return this;
 		} else {
-			return apiError("server_id", "number", value);
+			console.log(Error);
 		}
 	};
 
-    team_id = (value: number) => {
+	team_id = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "team_id", value });
 			return this;
 		} else {
-			return apiError("team_id", "number", value);
+			console.log(Error);
 		}
 	};
 
-    transmitting = (value: boolean) => {
+	transmitting = (value: boolean) => {
 		if (typeof value === "boolean") {
 			this.addQueryParameter({ name: "transmitting", value });
 			return this;
 		} else {
-			return apiError("transmitting", "boolean", value);
+			console.log(Error);
 		}
 	};
 
-    unit = (value: number) => {
+	unit = (value: number) => {
 		if (typeof value === "number") {
 			this.addQueryParameter({ name: "unit", value });
 			return this;
 		} else {
-			return apiError("unit", "number", value);
+			console.log(Error);
 		}
 	};
 }

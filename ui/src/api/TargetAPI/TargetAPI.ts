@@ -1,11 +1,5 @@
 import APIQueryBuilder from "../APIQueryBuilder";
 
-const apiError = (fnName: string, expected: string, received: string) => {
-	throw new Error(
-		`[TargetAPI::${fnName}] Error(Invalid Type):\nExpected: ${expected}.\nReceived: ${received}\n`
-	);
-};
-
 const endpoint = "target";
 const validQueryParameters = {
 	name: { type: "string" },
@@ -22,7 +16,7 @@ class TargetAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "name", value });
 			return this;
 		} else {
-			return apiError("name", "string", value);
+			console.log(Error);
 		}
 	};
 
@@ -31,7 +25,7 @@ class TargetAPI extends APIQueryBuilder {
 			this.addQueryParameter({ name: "offset", value });
 			return this;
 		} else {
-			return apiError("offset", "number", value);
+			console.log(Error);
 		}
 	};
 }

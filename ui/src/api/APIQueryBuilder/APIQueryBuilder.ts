@@ -1,13 +1,13 @@
-const queryBuilderThrow = (
-	fnName: string,
-	errorKind: string,
-	expected: string,
-	received: string | number | boolean
-) => {
-	throw new Error(
-		`[API QueryBuilder::${fnName}] Error(${errorKind}):\nExpected: ${expected}.\nReceived: ${received}\n`
-	);
-};
+// const queryBuilderThrow = (
+// 	fnName: string,
+// 	errorKind: string,
+// 	expected: string,
+// 	received: string | number | boolean
+// ) => {
+// 	throw new Error(
+// 		`[API QueryBuilder::${fnName}] Error(${errorKind}):\nExpected: ${expected}.\nReceived: ${received}\n`
+// 	);
+// };
 
 class APIQueryBuilder implements IAPIQueryBuilder {
 	#queryParams: Array<string> = [];
@@ -25,7 +25,8 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 			this.#_id = num;
 			return this;
 		} else {
-			return queryBuilderThrow("id", "Invalid Parameter Type", "number", num);
+			console.log("invalid type");
+			// return queryBuilderThrow("id", "Invalid Parameter Type", "number", num);
 		}
 	};
 
@@ -34,12 +35,13 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 			this.#queryParams.push(`${param.name}=${param.value}`);
 			return this;
 		} else {
-			return queryBuilderThrow(
-				"addQueryParameter",
-				"Invalid Parameter Type",
-				"boolean",
-				param.value.toString()
-			);
+			// return queryBuilderThrow(
+			// 	"addQueryParameter",
+			// 	"Invalid Parameter Type",
+			// 	"boolean",
+			// 	param.value.toString()
+			// );
+			console.log(Error);
 		}
 	};
 
@@ -48,12 +50,13 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 			this.#queryParams.push(`${param.name}=${param.value}`);
 			return this;
 		} else {
-			return queryBuilderThrow(
-				"addQueryParameter",
-				"Invalid Parameter Type",
-				"number",
-				param.value.toString()
-			);
+			// return queryBuilderThrow(
+			// 	"addQueryParameter",
+			// 	"Invalid Parameter Type",
+			// 	"number",
+			// 	param.value.toString()
+			// );
+			console.log(Error);
 		}
 	};
 
@@ -62,12 +65,13 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 			this.#queryParams.push(`${param.name}=${param.value}`);
 			return this;
 		} else {
-			return queryBuilderThrow(
-				"addQueryParameter",
-				"Invalid Parameter Type",
-				"string",
-				param.value.toString()
-			);
+			// return queryBuilderThrow(
+			// 	"addQueryParameter",
+			// 	"Invalid Parameter Type",
+			// 	"string",
+			// 	param.value.toString()
+			// );
+			console.log(Error);
 		}
 	};
 
@@ -76,12 +80,13 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 			this.#queryParams.push(`${param.name}=${JSON.stringify(param.value)}`);
 			return this;
 		} else {
-			return queryBuilderThrow(
-				"addQueryParameter",
-				"Invalid Parameter Type",
-				"Date",
-				param.value.toString()
-			);
+			// return queryBuilderThrow(
+			// 	"addQueryParameter",
+			// 	"Invalid Parameter Type",
+			// 	"Date",
+			// 	param.value.toString()
+			// );
+			console.log(Error);
 		}
 	};
 
@@ -97,20 +102,22 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 				case "Date":
 					return this.addDateQueryParameter(param);
 				default:
-					return queryBuilderThrow(
-						"addQueryParameter",
-						"Invalid Parameter Type",
-						"One of number, string, enum, or Date",
-						this.validQueryParams[param.name].type
-					);
+					// return queryBuilderThrow(
+					// 	"addQueryParameter",
+					// 	"Invalid Parameter Type",
+					// 	"One of number, string, enum, or Date",
+					// 	this.validQueryParams[param.name].type
+					// );
+					console.log(Error);
 			}
 		} else {
-			queryBuilderThrow(
-				"addQueryParameter",
-				"Invalid Parameter Name",
-				`One of ${Object.keys(this.validQueryParams).join(",")}`,
-				param.name
-			);
+			// queryBuilderThrow(
+			// 	"addQueryParameter",
+			// 	"Invalid Parameter Name",
+			// 	`One of ${Object.keys(this.validQueryParams).join(",")}`,
+			// 	param.name
+			// );
+			console.log(Error);
 		}
 	};
 
@@ -157,12 +164,13 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 				headers
 			});
 		} else {
-			queryBuilderThrow(
-				"delete",
-				"method id never called",
-				".id(num)\n.delete()",
-				".delete()"
-			);
+			// queryBuilderThrow(
+			// 	"delete",
+			// 	"method id never called",
+			// 	".id(num)\n.delete()",
+			// 	".delete()"
+			// );
+			console.log(Error);
 		}
 	};
 
@@ -194,12 +202,13 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 				body
 			});
 		} else {
-			queryBuilderThrow(
-				"update",
-				"method id never called",
-				".id(num)\n.update(data)",
-				".update(data)"
-			);
+			// queryBuilderThrow(
+			// 	"update",
+			// 	"method id never called",
+			// 	".id(num)\n.update(data)",
+			// 	".update(data)"
+			// );
+			console.log(Error);
 		}
 	};
 }
