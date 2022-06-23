@@ -1,6 +1,8 @@
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import createTheme from '@mui/material/styles/createTheme';
 import { PaletteMode } from '@mui/material';
+
 import { getDesignTokens } from "#themes";
 import PropTypes from "prop-types";
 import {

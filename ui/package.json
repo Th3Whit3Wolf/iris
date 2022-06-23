@@ -23,6 +23,7 @@
 		"@mui/icons-material": "^5.6.2",
 		"@mui/material": "^5.6.2",
 		"axios": "^0.26.1",
+		"color": "^4.2.3",
 		"engine.io-client": "^6.2.2",
 		"jest-canvas-mock": "^2.4.0",
 		"prop-types": "^15.8.1",
@@ -40,6 +41,7 @@
 		"@testing-library/react-hooks": "^8.0.0",
 		"@testing-library/user-event": "^13.5.0",
 		"@trivago/prettier-plugin-sort-imports": "^3.2.0",
+		"@types/color": "^3.0.3",
 		"@types/debug": "^4",
 		"@types/node": "^17.0.41",
 		"@types/prop-types": "^15.7.5",
@@ -85,7 +87,6 @@
 			"import",
 			"@typescript-eslint"
 		],
-		"parser": "@typescript-eslint/parser",
 		"overrides": [
 			{
 				"files": [
@@ -101,7 +102,11 @@
 					"**/*.ts?(x)"
 				],
 				"parser": "@typescript-eslint/parser",
+				"parserOptions": {
+					"project": "./tsconfig.json"
+				},
 				"rules": {
+					"@typescript-eslint/switch-exhaustiveness-check": "warn",
 					"@typescript-eslint/no-explicit-any": "warn"
 				},
 				"extends": [
@@ -121,19 +126,6 @@
 			"react/prop-types": "off"
 		},
 		"settings": {
-			"import/parsers": {
-				"@typescript-eslint/parser": [
-					".ts",
-					".tsx"
-				]
-			},
-			"import/resolver": {
-				"typescript": {
-					"project": [
-						"tsconfig.json"
-					]
-				}
-			},
 			"react": {
 				"version": "detect"
 			}

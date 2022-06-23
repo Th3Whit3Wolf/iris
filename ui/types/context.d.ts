@@ -57,7 +57,7 @@ type AppProviderProps = {
 
 interface IAppContext {
 	app: IrisApp;
-	setApp: (update: any) => void;
+	setApp: () => void;
 }
 
 interface ISpectrumAnalyzer {
