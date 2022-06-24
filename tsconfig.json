@@ -1,3 +1,10 @@
 {
-  "extends": "./tsconfig.base"
+  "extends": "./tsconfig.base",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@iris/ui/*": ["ui/src/*"],
+      "@iris/api/*": ["api/src/*"]
+    }
+  }
 }

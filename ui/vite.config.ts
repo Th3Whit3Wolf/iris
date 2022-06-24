@@ -3,7 +3,6 @@
 import eslintPlugin from "@nabla/vite-plugin-eslint";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
-import { ViteAliases } from "vite-aliases";
 import mkcert from "vite-plugin-mkcert";
 import tsconfigPaths from "vite-tsconfig-paths";
 
@@ -18,13 +17,7 @@ export default defineConfig(({ command }) => {
 		server: {
 			https: true
 		},
-		plugins: [
-			react(),
-			tsconfigPaths(),
-			ViteAliases({ prefix: "#", useTypescript: true }),
-			mkcert(),
-			eslintPlugin()
-		],
+		plugins: [react(), mkcert(), tsconfigPaths(), eslintPlugin()],
 		test: {
 			globals: true,
 			environment: "jsdom",

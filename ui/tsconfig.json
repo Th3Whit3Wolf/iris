@@ -21,8 +21,6 @@
 			"#hooks/*": ["./src/hooks/*"],
 			"#themes": ["./src/themes"],
 			"#themes/*": ["./src/themes/*"],
-			"#types": ["./src/types"],
-			"#types/*": ["./src/types/*"],
 			"#utils": ["./src/utils"],
 			"#utils/*": ["./src/utils/*"]
 		}

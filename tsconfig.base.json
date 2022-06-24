@@ -18,9 +18,5 @@
     "target": "ES2016",
     "strict": true /* Enable all strict type-checking options. */,
     "strictNullChecks": true
-  },
-  "paths": {
-    "@iris/ui/*": ["ui/src/*"],
-    "@iris/api/*": ["api/src/*"]
   }
 }
