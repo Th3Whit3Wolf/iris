@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 import { SpectrumAnalyzerAPI } from "#api";
 import { RfEnvironment } from "../RfEnvironment";
-import { antennas, satellites } from "../constants";
+import { antennas, satellites } from "#constants";
 // eslint-disable-next-line no-unused-vars
 import { io, Socket } from "socket.io-client";
 
