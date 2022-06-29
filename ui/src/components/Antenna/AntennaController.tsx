@@ -1,24 +1,28 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import PropTypes from 'prop-types';
-//import { useTheme } from '@mui/material/styles/useTheme';
+
+// import { useTheme } from '@mui/material/styles/useTheme';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import SettingsBackupRestoreIcon from '@mui/icons-material/SettingsBackupRestore';
 import CellTowerIcon from '@mui/icons-material/CellTower';
 import AlignHorizontalCenterIcon from '@mui/icons-material/AlignHorizontalCenter';
+
 import { useAntennaContext, useUserContext } from '#context';
 import { antennas, satellites } from '#constants';
+import { AntennaAPI } from '#api';
 import './Antenna.css';
-import { CRUDdataTable } from '../../../../../crud/crud';
 
 
-const AntennaController = ({ unit }) => {
+
+const AntennaController = ({ unit }: {unit: number}) => {
   const {user} = useUserContext();
-  //const theme = useTheme();
+  // const theme = useTheme();
   const {antenna, setAntenna} = useAntennaContext();
   const unitData = antenna.filter(x => x.unit == unit && x.team_id == user.team_id && x.server_id == user.server_id)
   const index = antenna.map(x => x.id).indexOf(unitData[0].id)
+  const api = new AntennaAPI();
 
   // Styles
   const sxAntennaCase = {
@@ -98,10 +102,10 @@ const AntennaController = ({ unit }) => {
     borderRadius: '10px',
   };
   // Modem Case Id
-  const sidebar = [];
-  ['A', 'N', 'T'].forEach((x, index) => {
+  const sidebar: Array<ReactNode> = [];
+  ['A', 'N', 'T'].forEach(x => {
     sidebar.push(
-      <Typography key={index} sx={{ color: 'black' }}>
+      <Typography key={`AntennaControllerSidebar-${x}`} sx={{ color: 'black' }}>
         {x}
       </Typography>
     );
@@ -118,25 +122,26 @@ const AntennaController = ({ unit }) => {
   // Target Band Offset
   const AntennaInput = () => {
     const [inputData, setInputData] = useState(antenna[index]);
-    const handleInputChange = ({ param, val }) => {
+    const handleInputChange = ({ param, val}: { param: "offset" | "target_id" | "band", val: string}) => {
+      let valParsed = 0;
+      const tmpInputData = { ...inputData };
       if (param === 'offset') {
         // if contains any symbols except - and number then return
         if (val.match(/[^0-9-]/g)) return;
         if (!isNaN(parseInt(val))) {
-          val = parseInt(val);
+          valParsed = parseInt(val);
         }
       } else {
-        val = parseInt(val);
+        valParsed = parseInt(val);
       }
-      const tmpInputData = { ...inputData };
-      tmpInputData[param] = val;
+      tmpInputData[param] = valParsed;
       setInputData(tmpInputData);
     };
     const handleApply = () => {
       const tmpData = [...antenna];
       tmpData[index] = inputData;
       setAntenna(tmpData);
-      CRUDdataTable({method: 'PATCH', path: 'antenna', data: tmpData[index]})
+      api.update(tmpData[index]);
     };
     return (
       <Box sx={sxInputBox}>
@@ -146,9 +151,9 @@ const AntennaController = ({ unit }) => {
             name='Target'
             value={inputData.target_id}
             onChange={e => handleInputChange({ param: 'target_id', val: e.target.value })}>
-            {satellites.map((x, index) => {
+            {satellites.map((x, idx) => {
               return (
-                <option value={x.id} key={index}>
+                <option value={x.id} key={`AntennaControllerTargetOption-${idx+1}`}>
                   {x.name}
                 </option>
               );
@@ -162,9 +167,9 @@ const AntennaController = ({ unit }) => {
             name='band'
             value={inputData.band}
             onChange={e => handleInputChange({ param: 'band', val: e.target.value })}>
-            {antennas.map((x, index) => {
+            {antennas.map((x, idx) => {
               return (
-                <option value={index} key={index}>
+                <option value={idx} key={`AntennaControllerBandOption-${idx+1}`}>
                   {x.band}
                 </option>
               );
@@ -185,7 +190,7 @@ const AntennaController = ({ unit }) => {
         </Box>
         <Box sx={sxInputRow}>
           <div></div>
-          <Button sx={sxInputApply} onClick={e => handleApply(e)}>
+          <Button sx={sxInputApply} onClick={handleApply}>
             Apply
           </Button>
         </Box>
@@ -200,14 +205,14 @@ const AntennaController = ({ unit }) => {
       const loopback = tmpData[index].loopback;
       tmpData[index].loopback = !loopback;
       setAntenna(tmpData);
-      CRUDdataTable({method: 'PATCH', path: 'antenna', data: tmpData[index]})
+      api.update(tmpData[index]);
     };
     const handleHPA = () => {
       const tmpData = [...antenna];
       const hpa = tmpData[index].hpa;
       tmpData[index].hpa = !hpa;
       setAntenna(tmpData);
-      CRUDdataTable({method: 'PATCH', path: 'antenna', data: tmpData[index]})
+      api.update(tmpData[index]);
     };
     return (
       <Box sx={sxLoopback}>
@@ -215,17 +220,18 @@ const AntennaController = ({ unit }) => {
         <Box sx={sxLoopbackSwitch}>
           <SettingsBackupRestoreIcon />
           <center>
-            <img
+            <button
               className='lb_img'
-              src={`baseball_switch${antennaContext[index].loopback ? '' : '2'}.png`}
-              alt='baseball_switch'
-              onClick={e => toggleSwitch(e)}
+              onClick={() => toggleSwitch()}
+              style={{
+                backgroundImage: `baseball_switch${antenna[index].loopback ? '' : '2'}.png`
+              }}
             />
           </center>
           <CellTowerIcon sx={sxTx} />
         </Box>
         <AlignHorizontalCenterIcon />
-        <Button sx={sxHPA} onClick={e => handleHPA(e)}>
+        <Button sx={sxHPA} onClick={handleHPA}>
           <Typography>HPA</Typography>
         </Button>
       </Box>
