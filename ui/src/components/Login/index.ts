@@ -1,3 +1,5 @@
-import Login from './Login';
+import JoinButton from "./JoinButton";
+import ServerSelect from "./ServerSelect";
+import TeamSelect from "./TeamSelect";
 
-export default Login;
+export { JoinButton, ServerSelect, TeamSelect };

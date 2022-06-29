@@ -1,6 +1,6 @@
 import { Injects, Timeline, SpectrumOverview } from '#components';
 
-const InstructorView = () => (
+const Instructor = () => (
   <>
     <Injects />
     <Timeline />
@@ -8,4 +8,4 @@ const InstructorView = () => (
   </>
 );
 
-export default InstructorView;
+export default Instructor;
