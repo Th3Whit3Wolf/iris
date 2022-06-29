@@ -6,7 +6,7 @@ import { describe, expect, test, beforeEach } from "vitest";
 
 describe("Transmitter", () => {
 	beforeAll(() => {
-		window.sewApp = {
+		window.iris = {
 			socket: {
 				on: jest.fn(),
 				emit: jest.fn()

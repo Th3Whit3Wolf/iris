@@ -8,7 +8,7 @@ import TableBody from  '@mui/material/TableBody';
 // import { useTheme } from '@mui/material/styles/useTheme';
 import PropTypes from 'prop-types';
 
-const Equipment = ({ sewApp }) => {
+const Equipment = ({ app }: {app: IrisApp}) => {
   const headerItems = [
     { name: 'Team' },
     { name: 'Antenna' },
@@ -35,7 +35,7 @@ const Equipment = ({ sewApp }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sewApp.environment?.signals.map((signal, index) => (
+            {app.environment?.signals.map((signal: any, index: number) => (
               <TableRow key={index}>
                 <TableCell>{signal.team || 'blue'}</TableCell>
                 <TableCell>{signal.antenna || '1'}</TableCell>

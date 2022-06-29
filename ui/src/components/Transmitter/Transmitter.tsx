@@ -6,7 +6,7 @@ const Transmitter = () => {
   return (
     <>
     {units.map((x, index) => (
-      <Grid item xs={6} s={6} md={6} lg={6} xl={3} key={index}>
+      <Grid item key={index} xs={6} sm={6} md={6} lg={6} xl={3}>
         <TxModem unit={x} />
       </Grid>
     ))}

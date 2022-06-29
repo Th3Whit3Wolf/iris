@@ -5,9 +5,15 @@ import Equipment from "./Equipment";
 import Footer from "./Footer";
 import Header from "./Header";
 import Injects from "./Injects";
-import InstructorView from "./InstructorView";
-import Login from "./Login";
-import { Receiver, RxModem } from "./Receiver";
+import { JoinButton, ServerSelect, TeamSelect } from "./Login";
+import Receiver from "./Receiver";
+import {
+	RxModem,
+	RxModemButton,
+	RxModemButtonBox,
+	RxModemInput,
+	RxVideo
+} from "./RxModem";
 import {
 	SpectrumAnalyzer,
 	SpectrumAnalyzerBox,
@@ -15,10 +21,16 @@ import {
 	SpectrumAnalyzerGrid
 } from "./SpectrumAnalyzer";
 import SpectrumOverview from "./SpectrumOverview";
-import StudentView from "./StudentView";
 import TeamInfo from "./TeamInfo";
 import Timeline from "./Timeline";
-import { Transmitter, TxModem } from "./Transmitter";
+import Transmitter from "./Transmitter";
+import {
+	TxModem,
+	TxModemButton,
+	TxModemButtonBox,
+	TxModemInput
+} from "./TxModem";
+import Video from "./Video";
 
 export {
 	Antenna,
@@ -29,18 +41,26 @@ export {
 	Footer,
 	Header,
 	Injects,
-	InstructorView,
-	Login,
+	JoinButton,
 	Receiver,
 	RxModem,
+	RxModemButton,
+	RxModemButtonBox,
+	RxModemInput,
+	RxVideo,
+	ServerSelect,
 	SpectrumAnalyzer,
 	SpectrumAnalyzerBox,
 	SpectrumAnalyzerController,
 	SpectrumAnalyzerGrid,
 	SpectrumOverview,
-	StudentView,
 	TeamInfo,
+	TeamSelect,
 	Timeline,
 	Transmitter,
-	TxModem
+	TxModem,
+	TxModemButton,
+	TxModemButtonBox,
+	TxModemInput,
+	Video
 };

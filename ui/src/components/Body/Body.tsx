@@ -15,7 +15,7 @@ const Body: FunctionComponent<BodyProps> = ({
     height: '100%',
     width: '100%',
     flexGrow: 1,
-    //backgroundColor: theme.astro.tertiary.light3,
+    // backgroundColor: theme.astro.tertiary.light3,
   };
   return <Paper sx={sxBody}>{children}</Paper>;
 };

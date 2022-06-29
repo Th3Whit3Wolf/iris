@@ -1,4 +1,3 @@
 import Receiver from "./Receiver";
-import RxModem from "./RxModem";
 
-export { Receiver, RxModem };
+export default Receiver;
