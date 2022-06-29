@@ -20,24 +20,49 @@ import { useEffect, useReducer, useRef } from "react";
 const fetchHandler = async (
 	api: API,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	let res;
+	body?: any
+): Promise<Response> => {
+	let headers: Headers;
+	const url: string = api.toURL();
+	body = JSON.stringify(body !== undefined ? body : {});
 	switch (method) {
 		case HTTPMethod.DELETE:
-			res = await api.delete();
-			break;
+			headers = new Headers({});
+			return fetch(url, {
+				method: "DELETE",
+				mode: "cors",
+				headers
+			});
 		case HTTPMethod.GET:
-			res = await api.get();
-			break;
+			headers = new Headers({});
+			return fetch(url, {
+				method: "GET",
+				mode: "cors",
+				headers
+			});
 		case HTTPMethod.POST:
-			res = await api.create(methodData !== undefined ? methodData : {});
-			break;
+			headers = new Headers({
+				"Content-Type": "application/json; charset=UTF-8"
+			});
+			return fetch(url, {
+				method: "POST",
+				mode: "cors",
+				headers,
+				body
+			});
 		case HTTPMethod.PUT:
-			res = await api.update(methodData !== undefined ? methodData : {});
-			break;
+			headers = new Headers({
+				"Content-Type": "application/json; charset=UTF-8"
+			});
+			return fetch(url, {
+				method: "PUT",
+				mode: "cors",
+				headers,
+				body
+			});
+		default:
+			throw new Error("Unreachable");
 	}
-	return res;
 };
 
 type Cache<T = Return> = { [url: string]: T };
@@ -45,7 +70,7 @@ type Cache<T = Return> = { [url: string]: T };
 function useFetch<T = Return>(
 	api: API,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
+	body?: any
 ): State<T> {
 	const cache = useRef<Cache<T>>({});
 
@@ -89,17 +114,15 @@ function useFetch<T = Return>(
 			}
 
 			try {
-				const res = await fetchHandler(api, method, methodData);
+				const res = await fetchHandler(api, method, body);
 
-				if (res !== undefined) {
-					if (!res.ok) {
-						throw new Error(res.statusText);
-					}
-					const data = (await res.json()) as T;
-					cache.current[url] = data;
-					if (cancelRequest.current) return;
-					dispatch({ type: "fetched", payload: data });
+				if (!res.ok) {
+					throw new Error(res.statusText);
 				}
+				const data = (await res.json()) as T;
+				cache.current[url] = data;
+				if (cancelRequest.current) return;
+				dispatch({ type: "fetched", payload: data });
 			} catch (error) {
 				if (cancelRequest.current) return;
 				dispatch({ type: "error", payload: error as Error });
@@ -123,137 +146,125 @@ function useFetch<T = Return>(
 const useFetchAction = (
 	api: ActionAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnAction | ReturnAction[]>(api, method, methodData);
+	body?: any
+): State<ReturnAction | ReturnAction[]> => {
+	return useFetch<ReturnAction | ReturnAction[]>(api, method, body);
 };
 
 const useFetchAntenna = (
 	api: AntennaAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnAntenna | ReturnAntenna[]>(api, method, methodData);
+	body?: any
+): State<ReturnAntenna | ReturnAntenna[]> => {
+	return useFetch<ReturnAntenna | ReturnAntenna[]>(api, method, body);
 };
 
 const useFetchAppAuthors = (
 	api: AppAuthorsAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnAppAuthor | ReturnAppAuthor[]>(api, method, methodData);
+	body?: any
+): State<ReturnAppAuthor | ReturnAppAuthor[]> => {
+	return useFetch<ReturnAppAuthor | ReturnAppAuthor[]>(api, method, body);
 };
 
 const useFetchInject = (
 	api: InjectAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnInject | ReturnInject[]>(api, method, methodData);
+	body?: any
+): State<ReturnInject | ReturnInject[]> => {
+	return useFetch<ReturnInject | ReturnInject[]>(api, method, body);
 };
 
 const useFetchPlayer = (
 	api: PlayerAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnPlayer | ReturnPlayer[]>(api, method, methodData);
+	body?: any
+): State<ReturnPlayer | ReturnPlayer[]> => {
+	return useFetch<ReturnPlayer | ReturnPlayer[]>(api, method, body);
 };
 
 const useFetchReceiver = (
 	api: ReceiverAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnReceiver | ReturnReceiver[]>(api, method, methodData);
+	body?: any
+): State<ReturnReceiver | ReturnReceiver[]> => {
+	return useFetch<ReturnReceiver | ReturnReceiver[]>(api, method, body);
 };
 
 const useFetchSave = (
 	api: SaveAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnSave | ReturnSave[]>(api, method, methodData);
+	body?: any
+): State<ReturnSave | ReturnSave[]> => {
+	return useFetch<ReturnSave | ReturnSave[]>(api, method, body);
 };
 
 const useFetchSaveSignal = (
 	api: SaveSignalAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnSaveSignal | ReturnSaveSignal[]>(
-		api,
-		method,
-		methodData
-	);
+	body?: any
+): State<ReturnSaveSignal | ReturnSaveSignal[]> => {
+	return useFetch<ReturnSaveSignal | ReturnSaveSignal[]>(api, method, body);
 };
 
 const useFetchSaveInject = (
 	api: SaveInjectAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnSaveInject | ReturnSaveInject[]>(
-		api,
-		method,
-		methodData
-	);
+	body?: any
+): State<ReturnSaveInject | ReturnSaveInject[]> => {
+	return useFetch<ReturnSaveInject | ReturnSaveInject[]>(api, method, body);
 };
 
 const useFetchServer = (
 	api: ServerAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnServer | ReturnServer[]>(api, method, methodData);
+	body?: any
+): State<ReturnServer | ReturnServer[]> => {
+	return useFetch<ReturnServer | ReturnServer[]>(api, method, body);
 };
 
 const useFetchSignal = (
 	api: SignalAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnSignal | ReturnSignal[]>(api, method, methodData);
+	body?: any
+): State<ReturnSignal | ReturnSignal[]> => {
+	return useFetch<ReturnSignal | ReturnSignal[]>(api, method, body);
 };
 
 const useFetchSpectrumAnalyzer = (
 	api: SpectrumAnalyzerAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
+	body?: any
+): State<ReturnSpectrumAnalyzer | ReturnSpectrumAnalyzer[]> => {
 	return useFetch<ReturnSpectrumAnalyzer | ReturnSpectrumAnalyzer[]>(
 		api,
 		method,
-		methodData
+		body
 	);
 };
 
 const useFetchTarget = (
 	api: TargetAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnTarget | ReturnTarget[]>(api, method, methodData);
+	body?: any
+): State<ReturnTarget | ReturnTarget[]> => {
+	return useFetch<ReturnTarget | ReturnTarget[]>(api, method, body);
 };
 
 const useFetchTeam = (
 	api: TeamAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnTeam | ReturnTeam[]>(api, method, methodData);
+	body?: any
+): State<ReturnTeam | ReturnTeam[]> => {
+	return useFetch<ReturnTeam | ReturnTeam[]>(api, method, body);
 };
 
 const useFetchTransmitter = (
 	api: TransmitterAPI,
 	method: HTTPMethod,
-	methodData?: Record<string, unknown>
-) => {
-	return useFetch<ReturnTransmitter | ReturnTransmitter[]>(
-		api,
-		method,
-		methodData
-	);
+	body?: any
+): State<ReturnTransmitter | ReturnTransmitter[]> => {
+	return useFetch<ReturnTransmitter | ReturnTransmitter[]>(api, method, body);
 };
 
 export {
