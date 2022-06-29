@@ -31,7 +31,7 @@ interface IColorModeContext {
 
 type IrisApp = {
 	announceSpecAChange: (i: number) => Promise<Response | undefined> | undefined;
-	getSpectrumAnalyzer: (i: number) => ISpectrumAnalyzer | undefined;
+	getSpectrumAnalyzer: (i: number) => ISpectrumAnalyzer | null;
 	init: () => void;
 
 	constants: any;
@@ -39,10 +39,10 @@ type IrisApp = {
 	socket: any;
 	socketInit: any;
 
-	specA1: ISpectrumAnalyzer | undefined;
-	specA2: ISpectrumAnalyzer | undefined;
-	specA3: ISpectrumAnalyzer | undefined;
-	specA4: ISpectrumAnalyzer | undefined;
+	specA1: ISpectrumAnalyzer | null;
+	specA2: ISpectrumAnalyzer | null;
+	specA3: ISpectrumAnalyzer | null;
+	specA4: ISpectrumAnalyzer | null;
 
 	team: any;
 	teamInfo: {
@@ -60,14 +60,15 @@ interface IAppContext {
 	setApp: () => void;
 }
 
-interface ISpectrumAnalyzer {
+interface ISpectrumAnalyzerFreq {
+	id: number;
+	freq: number;
+	span: number;
+}
+
+interface ISpectrumAnalyzerIF {
 	config: {
-		if?: {
-			id: number;
-		};
-		rf?: {
-			id: number;
-		};
+		if: ISpectrumAnalyzerFreq;
 	};
 	whichUnit: number;
 	isRfMode: boolean;
@@ -75,9 +76,25 @@ interface ISpectrumAnalyzer {
 	bw: number;
 	isDrawHold: boolean;
 	antenna_id: number;
-
+	target_id: number;
 	signals: any;
 }
+
+interface ISpectrumAnalyzerRF {
+	config: {
+		rf: ISpectrumAnalyzerFreq;
+	};
+	whichUnit: number;
+	isRfMode: boolean;
+	centerFreq: number;
+	bw: number;
+	isDrawHold: boolean;
+	antenna_id: number;
+	target_id: number;
+	signals: any;
+}
+
+type ISpectrumAnalyzer = ISpectrumAnalyzerIF | ISpectrumAnalyzerRF;
 
 type RxProviderProps = {
 	children?: React.ReactNode;

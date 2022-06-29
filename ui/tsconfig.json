@@ -19,6 +19,8 @@
 			"#context/*": ["./src/context/*"],
 			"#hooks": ["./src/hooks"],
 			"#hooks/*": ["./src/hooks/*"],
+			"#pages": ["./src/pages"],
+			"#pages/*": ["./src/pages/*"],
 			"#themes": ["./src/themes"],
 			"#themes/*": ["./src/themes/*"],
 			"#utils": ["./src/utils"],
