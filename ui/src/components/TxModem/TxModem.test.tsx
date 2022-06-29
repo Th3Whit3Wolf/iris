@@ -1,5 +1,5 @@
 import { TxModem } from "#components";
-import { tmpRxData } from "../Receiver/tmpRxData";
+import { tmpRxData } from "../RxModem/tmpRxData";
 import { render } from "@testing-library/react";
 import { describe, expect, test, beforeEach } from "vitest";
 
