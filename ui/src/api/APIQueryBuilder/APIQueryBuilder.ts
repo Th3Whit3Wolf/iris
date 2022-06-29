@@ -9,6 +9,16 @@
 // 	);
 // };
 
+const mkFetchReq = (url: string, options: any): Promise<Response> => {
+	return fetch(url, options).then((response: Response) => {
+		if (response.ok) {
+			return response;
+		} else {
+			throw new Error("Cannot convert response to json");
+		}
+	});
+};
+
 class APIQueryBuilder implements IAPIQueryBuilder {
 	#queryParams: Array<string> = [];
 	#_id: number | undefined;
@@ -140,48 +150,66 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 		return `${process.env.API_URL}/api/v1/${this.endpoint}`;
 	};
 
-	create = async (data: Record<string, unknown>) => {
-		const headers = new Headers({
-			"Content-Type": "application/json; charset=UTF-8"
-		});
-		const body = JSON.stringify(data);
-
-		return fetch(this.toURL(), {
-			method: "POST",
-			mode: "cors",
-			headers,
-			body
-		});
+	create = (data: any): Promise<Response> => {
+		try {
+			const body = JSON.stringify(data);
+			const headers = new Headers({
+				"Content-Type": "application/json; charset=UTF-8"
+			});
+			return mkFetchReq(this.toURL(), {
+				method: "POST",
+				mode: "cors",
+				headers,
+				body
+			});
+		} catch (err) {
+			console.error(err);
+			throw err;
+		}
 	};
 
-	delete = async () => {
-		if (this.#_id !== undefined) {
+	delete = (): Promise<Response> => {
+		try {
+			if (this.#_id !== undefined) {
+				throw new Error("Missing id...");
+			}
 			const headers = new Headers({});
 
-			return fetch(`${this.baseURL()}/${this.#_id}`, {
+			return mkFetchReq(this.toURL(), {
 				method: "DELETE",
 				mode: "cors",
 				headers
 			});
-		} else {
-			// queryBuilderThrow(
-			// 	"delete",
-			// 	"method id never called",
-			// 	".id(num)\n.delete()",
-			// 	".delete()"
-			// );
-			console.log(Error);
+		} catch (err) {
+			console.error(err);
+			throw err;
 		}
+
+		// if (this.#_id !== undefined) {
+
+		// } else {
+		// 	// queryBuilderThrow(
+		// 	// 	"delete",
+		// 	// 	"method id never called",
+		// 	// 	".id(num)\n.delete()",
+		// 	// 	".delete()"
+		// 	// );
+		// 	console.log(Error);
+		// }
 	};
 
-	get = async () => {
-		const headers = new Headers({});
-
-		return fetch(this.toURL(), {
-			method: "GET",
-			mode: "cors",
-			headers
-		});
+	get = (): Promise<Response> => {
+		try {
+			const headers = new Headers({});
+			return mkFetchReq(this.toURL(), {
+				method: "GET",
+				mode: "cors",
+				headers
+			});
+		} catch (err) {
+			console.error(err);
+			throw err;
+		}
 	};
 
 	/**
@@ -189,27 +217,45 @@ class APIQueryBuilder implements IAPIQueryBuilder {
 	 * @param data - Object containing the data to update
 	 * @returns
 	 */
-	update = async (data: Record<string, unknown>) => {
-		if (this.#_id !== undefined) {
+	update = (data: any): Promise<Response> => {
+		try {
+			if (this.#_id !== undefined) {
+				throw new Error("Missing id...");
+			}
+			const body = JSON.stringify(data);
 			const headers = new Headers({
 				"Content-Type": "application/json; charset=UTF-8"
 			});
-			const body = JSON.stringify(data);
-			return fetch(`${this.baseURL()}/${this.#_id}`, {
+			return mkFetchReq(this.toURL(), {
 				method: "PUT",
 				mode: "cors",
 				headers,
 				body
 			});
-		} else {
-			// queryBuilderThrow(
-			// 	"update",
-			// 	"method id never called",
-			// 	".id(num)\n.update(data)",
-			// 	".update(data)"
-			// );
-			console.log(Error);
+		} catch (err) {
+			console.error(err);
+			throw err;
 		}
+		// if (this.#_id !== undefined) {
+		// 	const body = JSON.stringify(data);
+		// 	const headers = new Headers({
+		// 		"Content-Type": "application/json; charset=UTF-8"
+		// 	});
+		// 	return mkFetchReq(this.toURL(), {
+		// 		method: "PUT",
+		// 		mode: "cors",
+		// 		headers,
+		// 		body
+		// 	});
+		// } else {
+		// 	// queryBuilderThrow(
+		// 	// 	"update",
+		// 	// 	"method id never called",
+		// 	// 	".id(num)\n.update(data)",
+		// 	// 	".update(data)"
+		// 	// );
+		// 	console.log(Error);
+		// }
 	};
 }
 export default APIQueryBuilder;
