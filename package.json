@@ -12,10 +12,13 @@
     "ui"
   ],
   "scripts": {
-    "install": "npm install -ws",
+    "install": "npm install -w @iris/api && npm install -w @iris/ui",
     "dev": "npm run dev -ws",
     "check": "npm run check -ws",
     "api": "npm start -w iris-api",
     "ui": "npm start -w iris-ui"
+  },
+  "dependencies": {
+    "use-sound": "^4.0.1"
   }
 }
