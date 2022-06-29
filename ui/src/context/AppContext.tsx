@@ -76,41 +76,41 @@ const defaultApp: IrisApp = {
 
 		socket.connect();
 	},
-	getSpectrumAnalyzer: (i: number) => {
+	getSpectrumAnalyzer: (i: number): ISpectrumAnalyzer | null => {
 		if (i === 1) return window.iris.specA1;
 		if (i === 2) return window.iris.specA2;
 		if (i === 3) return window.iris.specA3;
-		return window.iris.specA4;
+		if (i === 4) return window.iris.specA4;
+		return null;
 	},
 	announceSpecAChange: (i: number) => {
-		const specA = window.iris.getSpectrumAnalyzer(i);
-		if (specA) {
-			const patchData = {
-				id: specA.isRfMode ? specA.config?.rf?.id : specA.config?.if?.id,
-				server_id: 1,
-				team_id: 1,
-				unit: specA.whichUnit,
-				number: specA.isRfMode ? 2 : 1,
-				operational: true,
-				frequency: specA.centerFreq / 1e6,
-				span: specA.bw / 1e6,
-				marker1freq: 1240,
-				marker2freq: 1260,
-				trace: specA.isDrawHold,
-				rf: specA.isRfMode ? true : false,
-				antenna_id: specA.antenna_id
-			};
-			//console.log('announceSpecAChange', defaultApp.socket.id);
-			defaultApp.socket.emit("updateSpectrumAnalyzer", patchData);
-			const api = new SpectrumAnalyzerAPI();
-			api.id(patchData.id !== undefined ? patchData.id : 1);
-			return api.update(patchData);
-		}
+		const specA = window.iris.getSpectrumAnalyzer(i) as ISpectrumAnalyzer;
+		const patchData = {
+			id: specA.isRfMode ? specA.config?.rf?.id : specA.config?.if?.id,
+			server_id: 1,
+			team_id: 1,
+			unit: specA.whichUnit,
+			number: specA.isRfMode ? 2 : 1,
+			operational: true,
+			frequency: specA.centerFreq / 1e6,
+			span: specA.bw / 1e6,
+			marker1freq: 1240,
+			marker2freq: 1260,
+			trace: specA.isDrawHold,
+			rf: specA.isRfMode ? true : false,
+			antenna_id: specA.antenna_id
+		};
+		//console.log('announceSpecAChange', defaultApp.socket.id);
+		defaultApp.socket.emit("updateSpectrumAnalyzer", patchData);
+		const api = new SpectrumAnalyzerAPI();
+		api.id(patchData.id !== undefined ? patchData.id : 1);
+		return api.update(patchData);
+
 	},
-	specA1: undefined,
-	specA2: undefined,
-	specA3: undefined,
-	specA4: undefined,
+	specA1: null,
+	specA2: null,
+	specA3: null,
+	specA4: null,
 	team: undefined
 };
 

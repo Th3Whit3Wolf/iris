@@ -1,5 +1,5 @@
 import { SignalAPI } from "#api";
-import { HTTPMethod, useFetchSignal } from "#hooks";
+import { useFetchSignal } from "#hooks";
 import PropTypes from "prop-types";
 import { FunctionComponent, useContext, useState, useMemo, createContext } from "react";
 
@@ -31,23 +31,28 @@ const defaultSignal = [
 ];
 
 const SignalContext = createContext({} as ISignalContext);
-const win = window as any as AppWindow;
-
 const SignalProvider: FunctionComponent<SignalProviderProps> = ({
 	children
 }) => {
 	const [signal, setSignalState] = useState(defaultSignal);
 	const api = new SignalAPI();
-	const signalData = useFetchSignal(api, HTTPMethod.GET);
+	const {data: signalData, error: signalError} = useFetchSignal(api, HTTPMethod.GET);
 
-	if (signalData !== undefined && Array.isArray(signalData)) {
+	if (signalError) {
+		console.error({signalError});
+	}
+	if (!signalData) {
+		console.log("Loading signal data...");
+	}
+
+	if (signalData && Array.isArray(signalData)) {
 		setSignalState([...signalData]);
 	}
 
 	const setSignal = (update: any) => {
         //console.log('SignalProvider', data);
-        win.iris.environment.setSignals(update);
-        win.iris.socket.emit('updateSignal', { user: win.iris.socket.id, signals: update });
+        window.iris.environment.setSignals(update);
+        window.iris.socket.emit('updateSignal', { user: window.iris.socket.id, signals: update });
 
 		setSignalState(update);
 	};
